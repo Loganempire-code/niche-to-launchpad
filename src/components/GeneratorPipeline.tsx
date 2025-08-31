@@ -12,6 +12,7 @@ import { PdfStructureBlock } from './blocks/PdfStructureBlock';
 import { BonusBlock } from './blocks/BonusBlock';
 import { PricingBlock } from './blocks/PricingBlock';
 import { MarketingBlock } from './blocks/MarketingBlock';
+import { ErrorBoundary } from './ErrorBoundary';
 
 interface PipelineState {
   isGenerating: boolean;
@@ -110,9 +111,11 @@ export const GeneratorPipeline = () => {
         description: "Votre produit digital est prêt à être exporté"
       });
     } catch (error) {
+      console.error('Generation error:', error);
+      const errorMessage = error instanceof Error ? error.message : "Une erreur s'est produite durant la génération";
       toast({
         title: "Erreur",
-        description: "Une erreur s'est produite durant la génération",
+        description: errorMessage,
         variant: "destructive"
       });
     } finally {
@@ -176,7 +179,7 @@ export const GeneratorPipeline = () => {
                 <div className="space-y-2">
                   <Progress value={progress} className="h-2 bg-muted" />
                   <p className="text-sm text-muted-foreground text-center">
-                    {PIPELINE_STEPS[state.currentStep]?.name}... ({Math.round(progress)}%)
+                    {PIPELINE_STEPS[state.currentStep]?.name || 'Génération en cours'}... ({Math.round(progress)}%)
                   </p>
                 </div>
               )}
@@ -204,12 +207,14 @@ export const GeneratorPipeline = () => {
                 isCompleted={isCompleted}
                 step={index + 1}
               >
-                {step.id === 'research' && <ResearchBlock data={blockData} />}
-                {step.id === 'hooks' && <HooksBlock data={blockData} />}
-                {step.id === 'pdfStructure' && <PdfStructureBlock data={blockData} />}
-                {step.id === 'bonus' && <BonusBlock data={blockData} />}
-                {step.id === 'pricing' && <PricingBlock data={blockData} />}
-                {step.id === 'marketing' && <MarketingBlock data={blockData} />}
+                <ErrorBoundary>
+                  {step.id === 'research' && <ResearchBlock data={blockData} />}
+                  {step.id === 'hooks' && <HooksBlock data={blockData} />}
+                  {step.id === 'pdfStructure' && <PdfStructureBlock data={blockData} />}
+                  {step.id === 'bonus' && <BonusBlock data={blockData} />}
+                  {step.id === 'pricing' && <PricingBlock data={blockData} />}
+                  {step.id === 'marketing' && <MarketingBlock data={blockData} />}
+                </ErrorBoundary>
               </BlockContainer>
             );
           })}
