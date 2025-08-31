@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card } from '@/components/ui/card';
@@ -39,6 +40,7 @@ const PIPELINE_STEPS = [
 
 export const GeneratorPipeline = () => {
   const { toast } = useToast();
+  const navigate = useNavigate();
   const [state, setState] = useState<PipelineState>({
     isGenerating: false,
     currentStep: -1,
@@ -53,29 +55,205 @@ export const GeneratorPipeline = () => {
     }
   });
 
-  const simulateGeneration = async (stepIndex: number) => {
+  const generateBlockContent = async (stepIndex: number, keyword: string, previousData: any = null) => {
+    const step = PIPELINE_STEPS[stepIndex];
+    
+    // Simulate API call with contextual generation
     return new Promise(resolve => {
       setTimeout(() => {
-        const mockData = {
-          research: {
-            competitors: ['Concurrent A', 'Concurrent B'],
-            keywords: ['mot-clé 1', 'mot-clé 2'],
-            painPoints: ['Problème 1', 'Problème 2'],
-            priceAnchors: ['49€', '97€', '197€']
-          },
-          hooks: [
-            {
-              title: "La méthode secrète que les experts ne veulent pas que vous connaissiez",
-              tagline: "Découvrez comment transformer votre passion en revenus passifs",
-              story: "Il y a 3 ans, Sarah était comme vous...",
-              benefit: "Générez 5000€/mois en automatique",
-              trigger: "FOMO - Plus que 48h"
-            }
-          ]
-        };
-        resolve(mockData[PIPELINE_STEPS[stepIndex].id as keyof typeof mockData] || {});
+        let result;
+        
+        switch (step.id) {
+          case 'research':
+            result = generateResearchData(keyword);
+            break;
+          case 'hooks':
+            result = generateHooksData(keyword, previousData);
+            break;
+          case 'pdfStructure':
+            result = generatePdfStructureData(keyword, previousData);
+            break;
+          case 'bonus':
+            result = generateBonusData(keyword, previousData);
+            break;
+          case 'pricing':
+            result = generatePricingData(keyword, previousData);
+            break;
+          case 'marketing':
+            result = generateMarketingData(keyword, previousData);
+            break;
+          default:
+            result = {};
+        }
+        
+        resolve(result);
       }, 2000 + Math.random() * 1000);
     });
+  };
+
+  // Content generation functions based on dedicated prompts
+  const generateResearchData = (keyword: string) => {
+    const keywordLower = keyword.toLowerCase();
+    
+    return {
+      keyword,
+      competitors: [
+        `${keyword} Pro Master`,
+        `Ultimate ${keyword} Guide`,
+        `${keyword} Secrets Revealed`
+      ],
+      keywords: [
+        `${keywordLower} solution`,
+        `comment ${keywordLower}`,
+        `${keywordLower} méthode`,
+        `${keywordLower} résultats`,
+        `${keywordLower} transformation`
+      ],
+      painPoints: [
+        `Frustré par le manque de résultats avec ${keywordLower}`,
+        `Confusion sur les vraies méthodes qui marchent pour ${keywordLower}`,
+        `Perte de temps avec des solutions inefficaces pour ${keywordLower}`
+      ],
+      priceAnchors: ['47€', '97€', '197€'],
+      recommendations: {
+        top_3_angles: [
+          `Secret peu connu sur ${keyword}`,
+          `Méthode rapide ${keyword}`,
+          `Transformation ${keyword} garantie`
+        ]
+      }
+    };
+  };
+
+  const generateHooksData = (keyword: string, researchData: any) => {
+    const angles = researchData?.research?.recommendations?.top_3_angles || [`Solution ${keyword}`];
+    
+    return [
+      {
+        id: "hook_1",
+        title: `${angles[0]} - Ce que personne ne vous dit`,
+        tagline: `Découvrez la vérité cachée sur ${keyword}`,
+        story: `Il y a 3 ans, j'étais comme vous, cherchant désespérément une solution pour ${keyword}. Puis j'ai découvert ce secret...`,
+        benefit: `Transformez votre approche du ${keyword} en 7 jours`,
+        trigger: "FOMO - Méthode limitée",
+        tone: "mystérieux"
+      },
+      {
+        id: "hook_2", 
+        title: `La méthode ${keyword} que les experts gardent secrète`,
+        tagline: `Révélations choquantes sur ${keyword}`,
+        story: `Un expert m'a confié cette technique ${keyword} lors d'un événement privé à 2500€...`,
+        benefit: `Maîtrisez ${keyword} comme un professionnel`,
+        trigger: "Autorité - Méthode d'expert",
+        tone: "autoritaire"
+      }
+    ];
+  };
+
+  const generatePdfStructureData = (keyword: string, previousData: any) => {
+    const selectedHook = previousData?.hooks?.[0] || {};
+    
+    return {
+      title: `Guide Complet: ${keyword} - Transformation Garantie`,
+      introduction: `Ce guide vous révèle tout sur ${keyword}`,
+      chapters: [
+        {
+          title: `Les secrets cachés du ${keyword}`,
+          content: `Découvrez les vérités que l'industrie du ${keyword} ne veut pas que vous sachiez...`,
+          exercises: [`Exercice d'évaluation ${keyword}`, `Plan d'action personnalisé`]
+        },
+        {
+          title: `Méthode étape par étape ${keyword}`,
+          content: `Appliquez cette méthode prouvée pour transformer votre approche du ${keyword}...`,
+          exercises: [`Mise en pratique ${keyword}`, `Suivi des résultats`]
+        },
+        {
+          title: `Cas pratiques et résultats ${keyword}`,
+          content: `Découvrez comment d'autres ont réussi avec ${keyword}...`,
+          exercises: [`Analyse de cas`, `Application personnelle`]
+        }
+      ],
+      conclusion: `Votre transformation ${keyword} commence maintenant`
+    };
+  };
+
+  const generateBonusData = (keyword: string, previousData: any) => {
+    return [
+      {
+        type: "checklist",
+        title: `Checklist ${keyword} - Action Immédiate`,
+        description: `Liste de vérification complète pour appliquer ${keyword} dès aujourd'hui`,
+        value: "47€",
+        deliverable: "PDF 5 pages avec checklist étape-par-étape"
+      },
+      {
+        type: "template",
+        title: `Templates ${keyword} Prêts à l'Emploi`,
+        description: `5 templates personnalisables pour accélérer vos résultats ${keyword}`,
+        value: "97€", 
+        deliverable: "Pack de 5 templates éditables"
+      },
+      {
+        type: "video",
+        title: `Masterclass ${keyword} Exclusive`,
+        description: `Formation vidéo approfondie sur les techniques avancées ${keyword}`,
+        value: "197€",
+        deliverable: "Vidéo 45min + support de cours"
+      }
+    ];
+  };
+
+  const generatePricingData = (keyword: string, previousData: any) => {
+    return {
+      mainPrice: "97€",
+      originalPrice: "297€",
+      orderBump: {
+        title: `Consultation ${keyword} Personnalisée`,
+        price: "47€",
+        description: `Session 1:1 pour optimiser votre stratégie ${keyword}`
+      },
+      upsells: [
+        {
+          title: `Coaching ${keyword} VIP`,
+          price: "497€",
+          description: `Accompagnement personnel sur 30 jours`
+        }
+      ],
+      guarantee: "Garantie 30 jours satisfait ou remboursé",
+      scarcity: "Offre limitée - Plus que 48h"
+    };
+  };
+
+  const generateMarketingData = (keyword: string, previousData: any) => {
+    return {
+      facebookAds: [
+        {
+          headline: `${keyword}: La méthode qui change tout`,
+          text: `Découvrez pourquoi 97% des gens échouent avec ${keyword} et comment éviter leurs erreurs...`,
+          cta: "Découvrir maintenant"
+        }
+      ],
+      instagramAds: [
+        {
+          caption: `🔥 SECRET ${keyword.toUpperCase()} révélé! Ce que les experts cachent...`,
+          hashtags: [`#${keyword.replace(' ', '')}`, "#transformation", "#secret", "#méthode"]
+        }
+      ],
+      tiktokScripts: [
+        {
+          hook: `Vous faites cette erreur avec ${keyword}`,
+          script: `La plupart des gens pensent que ${keyword} c'est compliqué, mais en réalité...`,
+          duration: "30s"
+        }
+      ],
+      emailSequence: [
+        {
+          subject: `[${keyword}] Votre erreur #1`,
+          preview: `Cette erreur vous coûte cher...`,
+          body: `La majorité des gens font cette erreur avec ${keyword}...`
+        }
+      ]
+    };
   };
 
   const handleGenerate = async () => {
@@ -91,11 +269,23 @@ export const GeneratorPipeline = () => {
     setState(prev => ({ ...prev, isGenerating: true, currentStep: 0 }));
 
     try {
+      let accumulatedData = {
+        research: null,
+        hooks: null,
+        pdfStructure: null,
+        bonus: null,
+        pricing: null,
+        marketing: null
+      };
+      
       for (let i = 0; i < PIPELINE_STEPS.length; i++) {
         setState(prev => ({ ...prev, currentStep: i }));
         
-        const result = await simulateGeneration(i);
+        const result = await generateBlockContent(i, state.keyword, accumulatedData);
         const stepKey = PIPELINE_STEPS[i].id as keyof typeof state.blocks;
+        
+        // Update accumulated data for next step
+        accumulatedData[stepKey] = result;
         
         setState(prev => ({
           ...prev,
@@ -121,6 +311,15 @@ export const GeneratorPipeline = () => {
     } finally {
       setState(prev => ({ ...prev, isGenerating: false, currentStep: -1 }));
     }
+  };
+
+  const handleViewReport = () => {
+    navigate('/report', { 
+      state: { 
+        keyword: state.keyword, 
+        blocks: state.blocks 
+      } 
+    });
   };
 
   const progress = state.isGenerating ? ((state.currentStep + 1) / PIPELINE_STEPS.length) * 100 : 0;
@@ -236,9 +435,13 @@ export const GeneratorPipeline = () => {
                 <Button variant="outline" size="lg">
                   Export JSON
                 </Button>
-                <Button size="lg" className="bg-gradient-primary hover:shadow-glow">
+                <Button 
+                  size="lg" 
+                  className="bg-gradient-primary hover:shadow-glow"
+                  onClick={handleViewReport}
+                >
                   <Sparkles className="w-5 h-5 mr-2" />
-                  Package Complet
+                  Voir le Rapport
                 </Button>
               </div>
             </div>
