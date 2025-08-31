@@ -70,10 +70,10 @@ export const BonusBlock = ({ data }: BonusBlockProps) => {
     }
   ];
 
-  const finalData = data || mockBonuses;
+  const finalData: Bonus[] = Array.isArray(data) ? data : mockBonuses;
   const totalValue = finalData.reduce((sum, bonus) => {
-    const value = parseInt(bonus.value.replace('€', ''));
-    return sum + value;
+    const numeric = parseInt(String(bonus.value).replace(/[^0-9]/g, '')) || 0;
+    return sum + numeric;
   }, 0);
 
   if (!finalData.length) {
