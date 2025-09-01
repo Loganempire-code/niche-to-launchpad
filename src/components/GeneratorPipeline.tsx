@@ -14,6 +14,7 @@ import { BonusBlock } from './blocks/BonusBlock';
 import { PricingBlock } from './blocks/PricingBlock';
 import { MarketingBlock } from './blocks/MarketingBlock';
 import { ErrorBoundary } from './ErrorBoundary';
+import { supabase } from '@/integrations/supabase/client';
 
 interface PipelineState {
   isGenerating: boolean;
@@ -57,207 +58,43 @@ export const GeneratorPipeline = () => {
     }
   });
 
-  const generateBlockContent = async (stepIndex: number, keyword: string, previousData: any = null) => {
-    const step = PIPELINE_STEPS[stepIndex];
-    
-    // Simulate API call with contextual generation
-    return new Promise(resolve => {
-      setTimeout(() => {
-        let result;
-        
-        switch (step.id) {
-          case 'research':
-            result = generateResearchData(keyword);
-            break;
-          case 'hooks':
-            result = generateHooksData(keyword, previousData);
-            break;
-          case 'pdfStructure':
-            result = generatePdfStructureData(keyword, previousData);
-            break;
-          case 'bonus':
-            result = generateBonusData(keyword, previousData);
-            break;
-          case 'pricing':
-            result = generatePricingData(keyword, previousData);
-            break;
-          case 'marketing':
-            result = generateMarketingData(keyword, previousData);
-            break;
-          default:
-            result = {};
+  const generateBlockContent = async (stepIndex: number, keyword: string, context: any = null) => {
+    try {
+      const blocNumber = stepIndex + 1;
+      
+      // Build context for the API call
+      const apiContext = {
+        ...context,
+        selectedHook: state.selectedHookIndex !== null && context?.hooks ? 
+          context.hooks[state.selectedHookIndex] : null
+      };
+      
+      console.log(`Calling backend for bloc ${blocNumber} with keyword: ${keyword}`);
+      
+      const { data, error } = await supabase.functions.invoke('generate-pipeline', {
+        body: {
+          bloc: blocNumber,
+          keyword,
+          context: apiContext
         }
-        
-        resolve(result);
-      }, 2000 + Math.random() * 1000);
-    });
-  };
-
-  // Content generation functions based on dedicated prompts
-  const generateResearchData = (keyword: string) => {
-    const keywordLower = keyword.toLowerCase();
-    
-    return {
-      keyword,
-      competitors: [
-        `${keyword} Pro Master`,
-        `Ultimate ${keyword} Guide`,
-        `${keyword} Secrets Revealed`
-      ],
-      keywords: [
-        `${keywordLower} solution`,
-        `comment ${keywordLower}`,
-        `${keywordLower} méthode`,
-        `${keywordLower} résultats`,
-        `${keywordLower} transformation`
-      ],
-      painPoints: [
-        `Frustré par le manque de résultats avec ${keywordLower}`,
-        `Confusion sur les vraies méthodes qui marchent pour ${keywordLower}`,
-        `Perte de temps avec des solutions inefficaces pour ${keywordLower}`
-      ],
-      priceAnchors: ['47€', '97€', '197€'],
-      recommendations: {
-        top_3_angles: [
-          `Secret peu connu sur ${keyword}`,
-          `Méthode rapide ${keyword}`,
-          `Transformation ${keyword} garantie`
-        ]
+      });
+      
+      if (error) {
+        console.error('Supabase function error:', error);
+        throw new Error(error.message || 'Erreur lors de l\'appel à l\'API');
       }
-    };
-  };
-
-  const generateHooksData = (keyword: string, researchData: any) => {
-    const angles = researchData?.research?.recommendations?.top_3_angles || [`Solution ${keyword}`];
-    
-    return [
-      {
-        id: "hook_1",
-        title: `${angles[0]} - Ce que personne ne vous dit`,
-        tagline: `Découvrez la vérité cachée sur ${keyword}`,
-        story: `Il y a 3 ans, j'étais comme vous, cherchant désespérément une solution pour ${keyword}. Puis j'ai découvert ce secret...`,
-        benefit: `Transformez votre approche du ${keyword} en 7 jours`,
-        trigger: "FOMO - Méthode limitée",
-        tone: "mystérieux"
-      },
-      {
-        id: "hook_2", 
-        title: `La méthode ${keyword} que les experts gardent secrète`,
-        tagline: `Révélations choquantes sur ${keyword}`,
-        story: `Un expert m'a confié cette technique ${keyword} lors d'un événement privé à 2500€...`,
-        benefit: `Maîtrisez ${keyword} comme un professionnel`,
-        trigger: "Autorité - Méthode d'expert",
-        tone: "autoritaire"
+      
+      if (!data.success) {
+        throw new Error(data.error || 'Erreur inconnue du backend');
       }
-    ];
-  };
-
-  const generatePdfStructureData = (keyword: string, previousData: any) => {
-    const hooks = previousData?.hooks || [];
-    const selectedHook = hooks[(state.selectedHookIndex ?? 0)] || hooks[0] || {};
-    const selectedTitle = selectedHook?.title ? ` — basé sur le hook: "${selectedHook.title}"` : '';
-    
-    return {
-      title: `Guide Complet: ${keyword} - Transformation Garantie`,
-      introduction: `Ce guide vous révèle tout sur ${keyword}${selectedTitle}`,
-      chapters: [
-        {
-          title: `Les secrets cachés du ${keyword}`,
-          content: `Découvrez les vérités que l'industrie du ${keyword} ne veut pas que vous sachiez...`,
-          exercises: [`Exercice d'évaluation ${keyword}`, `Plan d'action personnalisé`]
-        },
-        {
-          title: `Méthode étape par étape ${keyword}`,
-          content: `Appliquez cette méthode prouvée pour transformer votre approche du ${keyword}...`,
-          exercises: [`Mise en pratique ${keyword}`, `Suivi des résultats`]
-        },
-        {
-          title: `Cas pratiques et résultats ${keyword}`,
-          content: `Découvrez comment d'autres ont réussi avec ${keyword}...`,
-          exercises: [`Analyse de cas`, `Application personnelle`]
-        }
-      ],
-      conclusion: `Votre transformation ${keyword} commence maintenant`
-    };
-  };
-
-  const generateBonusData = (keyword: string, previousData: any) => {
-    return [
-      {
-        type: "checklist",
-        title: `Checklist ${keyword} - Action Immédiate`,
-        description: `Liste de vérification complète pour appliquer ${keyword} dès aujourd'hui`,
-        value: "47€",
-        deliverable: "PDF 5 pages avec checklist étape-par-étape"
-      },
-      {
-        type: "template",
-        title: `Templates ${keyword} Prêts à l'Emploi`,
-        description: `5 templates personnalisables pour accélérer vos résultats ${keyword}`,
-        value: "97€", 
-        deliverable: "Pack de 5 templates éditables"
-      },
-      {
-        type: "video",
-        title: `Masterclass ${keyword} Exclusive`,
-        description: `Formation vidéo approfondie sur les techniques avancées ${keyword}`,
-        value: "197€",
-        deliverable: "Vidéo 45min + support de cours"
-      }
-    ];
-  };
-
-  const generatePricingData = (keyword: string, previousData: any) => {
-    return {
-      mainPrice: "97€",
-      originalPrice: "297€",
-      orderBump: {
-        title: `Consultation ${keyword} Personnalisée`,
-        price: "47€",
-        description: `Session 1:1 pour optimiser votre stratégie ${keyword}`
-      },
-      upsells: [
-        {
-          title: `Coaching ${keyword} VIP`,
-          price: "497€",
-          description: `Accompagnement personnel sur 30 jours`
-        }
-      ],
-      guarantee: "Garantie 30 jours satisfait ou remboursé",
-      scarcity: "Offre limitée - Plus que 48h"
-    };
-  };
-
-  const generateMarketingData = (keyword: string, previousData: any) => {
-    return {
-      facebookAds: [
-        {
-          headline: `${keyword}: La méthode qui change tout`,
-          text: `Découvrez pourquoi 97% des gens échouent avec ${keyword} et comment éviter leurs erreurs...`,
-          cta: "Découvrir maintenant"
-        }
-      ],
-      instagramAds: [
-        {
-          caption: `🔥 SECRET ${keyword.toUpperCase()} révélé! Ce que les experts cachent...`,
-          hashtags: [`#${keyword.replace(' ', '')}`, "#transformation", "#secret", "#méthode"]
-        }
-      ],
-      tiktokScripts: [
-        {
-          hook: `Vous faites cette erreur avec ${keyword}`,
-          script: `La plupart des gens pensent que ${keyword} c'est compliqué, mais en réalité...`,
-          duration: "30s"
-        }
-      ],
-      emailSequence: [
-        {
-          subject: `[${keyword}] Votre erreur #1`,
-          preview: `Cette erreur vous coûte cher...`,
-          body: `La majorité des gens font cette erreur avec ${keyword}...`
-        }
-      ]
-    };
+      
+      console.log(`Successfully generated bloc ${blocNumber}:`, data.data);
+      return data.data;
+      
+    } catch (error) {
+      console.error('Error generating block content:', error);
+      throw error;
+    }
   };
 
   const handleGenerate = async () => {
