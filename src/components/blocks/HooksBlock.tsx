@@ -5,6 +5,7 @@ import { Badge } from '@/components/ui/badge';
 import { Sparkles, Heart, Zap, Star } from 'lucide-react';
 
 interface Hook {
+  id?: string;
   title: string;
   tagline: string;
   story: string;
@@ -14,10 +15,14 @@ interface Hook {
 
 interface HooksBlockProps {
   data?: Hook[];
+  selectedIndex?: number | null;
+  onSelect?: (index: number | null) => void;
+  onContinue?: () => void;
 }
 
-export const HooksBlock = ({ data }: HooksBlockProps) => {
-  const [selectedHook, setSelectedHook] = useState<number | null>(null);
+export const HooksBlock = ({ data, selectedIndex = null, onSelect, onContinue }: HooksBlockProps) => {
+  const [internalSelected, setInternalSelected] = useState<number | null>(selectedIndex);
+  const selectedHook = onSelect ? selectedIndex : internalSelected;
 
   if (!data || !Array.isArray(data)) {
     return (
@@ -51,7 +56,11 @@ export const HooksBlock = ({ data }: HooksBlockProps) => {
                 ? 'ring-2 ring-primary/50 bg-primary/5' 
                 : 'hover:bg-accent/30'
             }`}
-            onClick={() => setSelectedHook(selectedHook === index ? null : index)}
+            onClick={() => {
+              const next = selectedHook === index ? null : index;
+              if (onSelect) onSelect(next);
+              else setInternalSelected(next);
+            }}
           >
             <div className="space-y-4">
               {/* Header */}
@@ -71,7 +80,8 @@ export const HooksBlock = ({ data }: HooksBlockProps) => {
                   size="sm"
                   onClick={(e) => {
                     e.stopPropagation();
-                    setSelectedHook(index);
+                    if (onSelect) onSelect(index);
+                    else setInternalSelected(index);
                   }}
                 >
                   {selectedHook === index ? 'Sélectionné' : 'Sélectionner'}
@@ -114,7 +124,7 @@ export const HooksBlock = ({ data }: HooksBlockProps) => {
             <p className="text-sm text-muted-foreground">
               Ce hook sera utilisé pour générer automatiquement la structure PDF et les autres blocs.
             </p>
-            <Button className="bg-gradient-primary hover:shadow-glow">
+            <Button className="bg-gradient-primary hover:shadow-glow" onClick={onContinue}>
               Continuer avec ce Hook
             </Button>
           </div>

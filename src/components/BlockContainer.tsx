@@ -12,6 +12,7 @@ interface BlockContainerProps {
   isActive?: boolean;
   isCompleted?: boolean;
   step: number;
+  onCopy?: () => void;
 }
 
 export const BlockContainer = ({
@@ -21,13 +22,20 @@ export const BlockContainer = ({
   children,
   isActive = false,
   isCompleted = false,
-  step
+  step,
+  onCopy
 }: BlockContainerProps) => {
   const [isExpanded, setIsExpanded] = useState(isActive || isCompleted);
   const [copied, setCopied] = useState(false);
 
   const handleCopy = async () => {
-    // Simulate copy functionality
+    if (typeof onCopy === 'function') {
+      onCopy();
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+      return;
+    }
+    // Fallback simulation
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };

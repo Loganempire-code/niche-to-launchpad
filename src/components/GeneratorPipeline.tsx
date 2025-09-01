@@ -19,6 +19,7 @@ interface PipelineState {
   isGenerating: boolean;
   currentStep: number;
   keyword: string;
+  selectedHookIndex: number | null;
   blocks: {
     research: any;
     hooks: any;
@@ -45,6 +46,7 @@ export const GeneratorPipeline = () => {
     isGenerating: false,
     currentStep: -1,
     keyword: '',
+    selectedHookIndex: null,
     blocks: {
       research: null,
       hooks: null,
@@ -151,11 +153,13 @@ export const GeneratorPipeline = () => {
   };
 
   const generatePdfStructureData = (keyword: string, previousData: any) => {
-    const selectedHook = previousData?.hooks?.[0] || {};
+    const hooks = previousData?.hooks || [];
+    const selectedHook = hooks[(state.selectedHookIndex ?? 0)] || hooks[0] || {};
+    const selectedTitle = selectedHook?.title ? ` — basé sur le hook: "${selectedHook.title}"` : '';
     
     return {
       title: `Guide Complet: ${keyword} - Transformation Garantie`,
-      introduction: `Ce guide vous révèle tout sur ${keyword}`,
+      introduction: `Ce guide vous révèle tout sur ${keyword}${selectedTitle}`,
       chapters: [
         {
           title: `Les secrets cachés du ${keyword}`,
@@ -405,10 +409,24 @@ export const GeneratorPipeline = () => {
                 isActive={isActive}
                 isCompleted={isCompleted}
                 step={index + 1}
+                onCopy={blockData ? async () => {
+                  try {
+                    await navigator.clipboard.writeText(JSON.stringify(blockData, null, 2));
+                    toast({ title: 'Copié !', description: `${step.name} copié dans le presse-papiers` });
+                  } catch {
+                    toast({ title: 'Erreur', description: 'Impossible de copier', variant: 'destructive' });
+                  }
+                } : undefined}
               >
                 <ErrorBoundary>
                   {step.id === 'research' && <ResearchBlock data={blockData} />}
-                  {step.id === 'hooks' && <HooksBlock data={blockData} />}
+                  {step.id === 'hooks' && (
+                    <HooksBlock 
+                      data={blockData}
+                      selectedIndex={state.selectedHookIndex}
+                      onSelect={(i) => setState(prev => ({ ...prev, selectedHookIndex: i }))}
+                    />
+                  )}
                   {step.id === 'pdfStructure' && <PdfStructureBlock data={blockData} />}
                   {step.id === 'bonus' && <BonusBlock data={blockData} />}
                   {step.id === 'pricing' && <PricingBlock data={blockData} />}
@@ -432,7 +450,19 @@ export const GeneratorPipeline = () => {
                   <FileText className="w-5 h-5 mr-2" />
                   Export PDF
                 </Button>
-                <Button variant="outline" size="lg">
+                <Button variant="outline" size="lg" onClick={() => {
+                  const data = { keyword: state.keyword, selectedHookIndex: state.selectedHookIndex, blocks: state.blocks };
+                  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+                  const url = URL.createObjectURL(blob);
+                  const a = document.createElement('a');
+                  a.href = url;
+                  a.download = `${state.keyword.replace(/\s+/g, '_')}_rapport.json`;
+                  document.body.appendChild(a);
+                  a.click();
+                  document.body.removeChild(a);
+                  URL.revokeObjectURL(url);
+                  toast({ title: 'Export réussi !', description: 'Le JSON a été téléchargé' });
+                }}>
                   Export JSON
                 </Button>
                 <Button 
