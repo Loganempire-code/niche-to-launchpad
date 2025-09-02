@@ -79,7 +79,7 @@ Retour en JSON :
 Retour formats : JSON + dossiers texte pour chaque asset.`
 };
 
-async function callOpenAI(prompt: string, keyword: string, context?: any) {
+async function callOpenAI(prompt: string, keyword: string, context?: any, retries = 3) {
   const fullPrompt = prompt.replace(/\[MOT-CLÉ\]/g, keyword).replace(/\[HOOK_ID\]/g, context?.selectedHook?.id || '');
   
   let systemMessage = "Tu es un expert marketing et copywriter. Réponds UNIQUEMENT en JSON valide selon le format demandé.";
@@ -89,40 +89,57 @@ async function callOpenAI(prompt: string, keyword: string, context?: any) {
     userMessage += `\n\nContexte précédent: ${JSON.stringify(context)}`;
   }
 
-  try {
-    const response = await fetch('https://api.openai.com/v1/chat/completions', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${openAIApiKey}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        model: 'gpt-4o',
-        messages: [
-          { role: 'system', content: systemMessage },
-          { role: 'user', content: userMessage }
-        ],
-        max_tokens: 4000,
-        temperature: 0.7,
-      }),
-    });
-
-    if (!response.ok) {
-      throw new Error(`OpenAI API error: ${response.status}`);
-    }
-
-    const data = await response.json();
-    const content = data.choices[0].message.content;
-    
-    // Try to parse as JSON, if it fails return as text
+  for (let attempt = 0; attempt <= retries; attempt++) {
     try {
-      return JSON.parse(content);
-    } catch {
-      return { raw_content: content };
+      const response = await fetch('https://api.openai.com/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${openAIApiKey}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          model: 'gpt-4o',
+          messages: [
+            { role: 'system', content: systemMessage },
+            { role: 'user', content: userMessage }
+          ],
+          max_tokens: 4000,
+          temperature: 0.7,
+        }),
+      });
+
+      if (response.status === 429 && attempt < retries) {
+        // Rate limit hit, wait and retry
+        const waitTime = Math.pow(2, attempt) * 1000; // Exponential backoff
+        console.log(`Rate limit hit, waiting ${waitTime}ms before retry ${attempt + 1}/${retries}`);
+        await new Promise(resolve => setTimeout(resolve, waitTime));
+        continue;
+      }
+
+      if (!response.ok) {
+        const errorData = await response.text();
+        console.error(`OpenAI API error: ${response.status} - ${errorData}`);
+        throw new Error(`OpenAI API error: ${response.status} - ${errorData}`);
+      }
+
+      const data = await response.json();
+      const content = data.choices[0].message.content;
+      
+      // Try to parse as JSON, if it fails return as text
+      try {
+        return JSON.parse(content);
+      } catch {
+        return { raw_content: content };
+      }
+    } catch (error) {
+      console.error(`OpenAI API call failed (attempt ${attempt + 1}/${retries + 1}):`, error);
+      if (attempt === retries) {
+        throw error;
+      }
+      // Wait before retry for other errors too
+      const waitTime = Math.pow(2, attempt) * 1000;
+      await new Promise(resolve => setTimeout(resolve, waitTime));
     }
-  } catch (error) {
-    console.error('OpenAI API call failed:', error);
-    throw error;
   }
 }
 
