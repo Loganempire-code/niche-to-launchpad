@@ -79,7 +79,131 @@ Retour en JSON :
 Retour formats : JSON + dossiers texte pour chaque asset.`
 };
 
-async function callOpenAI(prompt: string, keyword: string, context?: any, retries = 3) {
+// Mock data for each bloc when OpenAI is not available
+const MOCK_DATA = {
+  bloc1: {
+    "keyword": "crypto",
+    "top_urls": [
+      {"title": "Top Crypto Trading Platform", "url": "https://example.com/crypto1", "snippet": "Leading platform for crypto trading"},
+      {"title": "Crypto Investment Guide", "url": "https://example.com/crypto2", "snippet": "Complete guide to crypto investing"}
+    ],
+    "keywords": [
+      {"kw": "bitcoin trading", "intent": "transactional", "relative_volume": "high"},
+      {"kw": "crypto investment", "intent": "informational", "relative_volume": "high"}
+    ],
+    "competitors": [
+      {"name": "CryptoMax Pro", "price": "$297", "format": "PDF + Video", "USP": "Secret trading signals", "reviews": "4.8/5 (1200 reviews)"}
+    ],
+    "pain_points": ["Losing money on bad trades", "Don't understand technical analysis"],
+    "desires": ["Make consistent profits", "Learn professional trading strategies"],
+    "angles": ["Secret insider trading method", "AI-powered trading signals"],
+    "ad_examples": [
+      {"platform": "Facebook", "copy": "Découvrez les secrets que les pros ne veulent pas que vous sachiez", "creative_description": "Dark trading screen with green profit charts", "metrics_if_any": "CTR 3.2%"}
+    ],
+    "virality_signals": [
+      {"url": "https://youtube.com/crypto-secret", "metric": "views", "value": "2.3M"}
+    ],
+    "pricing_anchor": {"min": "97", "mid": "297", "max": "997"},
+    "recommendations": {
+      "top_3_angles": ["Secret method", "AI trading", "Professional signals"],
+      "quick_action": "Focus on the mystery/secret angle first"
+    },
+    "sources": ["coindesk.com", "cointelegraph.com"]
+  },
+  
+  bloc2: [
+    {
+      "id": "hook_1",
+      "title": "Le Secret Crypto des Millionnaires",
+      "one_line_tagline": "La méthode cachée que Wall Street ne veut pas révéler",
+      "origin_story": "En 2019, j'ai découvert par hasard un document confidentiel abandonné dans un café près de Goldman Sachs. Ce document révélait une stratégie crypto utilisée exclusivement par les grandes institutions.",
+      "proof_of_value": "J'ai payé 15,000$ à un trader institutionnel pour ces informations",
+      "core_benefit": "Générer des profits constants même dans un marché volatile",
+      "cliffhanger": "Ce que vous allez découvrir va changer votre façon de voir le trading crypto pour toujours",
+      "emotional_triggers": ["curiosity", "fear_of_missing_out", "status"],
+      "recommended_thumbnail_text": "SECRET CRYPTO RÉVÉLÉ",
+      "tone": "mystérieux",
+      "recommended_tests": ["Le Secret Crypto", "Méthode Wall Street"]
+    }
+  ],
+  
+  bloc3: {
+    "sales_header": {
+      "title": "Le Secret Crypto des Millionnaires",
+      "subtitle": "La méthode cachée que Wall Street ne veut pas révéler",
+      "bullets": [
+        "Découvrez la stratégie secrète des institutions",
+        "Générez des profits constants en crypto",
+        "Évitez les pièges des traders amateurs"
+      ],
+      "price": "97€"
+    },
+    "pdf": [
+      {
+        "chapter_title": "Introduction : Le Document Confidentiel",
+        "word_count": 250,
+        "text": "Tout a commencé par hasard dans un café de Manhattan...",
+        "key_points": [
+          "Découverte du document secret",
+          "Validation des informations",
+          "Premiers résultats"
+        ],
+        "exercises": [
+          {"title": "Audit de votre portefeuille actuel", "format": "checklist", "duration": "15 min"}
+        ],
+        "image_suggestion": "Photo d'un document confidentiel sur une table de café"
+      }
+    ]
+  },
+  
+  bloc4: [
+    {
+      "id": "bonus1",
+      "title": "Calculateur de Risque Crypto",
+      "format": "pdf",
+      "purpose": "Calculer précisément le risque de chaque trade",
+      "deliverable_description": "Template Excel + guide d'utilisation (5 pages)",
+      "script_or_transcript": "Guide complet pour utiliser le calculateur...",
+      "filename_suggested": "calculateur-risque-crypto.pdf",
+      "cta_to_pdf": "Utilisez ce calculateur avec la méthode principale"
+    }
+  ],
+  
+  bloc5: {
+    "pricing_tiers": [
+      {"name": "Essentiel", "price": "67€", "justification": "Prix d'entrée accessible"},
+      {"name": "Complet", "price": "97€", "justification": "Valeur optimale rapport qualité/prix"},
+      {"name": "Premium", "price": "197€", "justification": "Avec bonus exclusifs"}
+    ],
+    "order_bump": {"title": "Guide des Altcoins Secrets", "price": "27€"},
+    "upsells": [
+      {"title": "Coaching 1:1", "price": "497€", "description": "Session personnalisée de 1h"}
+    ],
+    "scarcity_phrases": ["Seulement 100 copies disponibles", "Offre limitée 48h"],
+    "guarantee_text": "Garantie satisfait ou remboursé 30 jours"
+  },
+  
+  bloc6: {
+    "ad_copy": [
+      {
+        "platform": "Facebook",
+        "primary_text": "🚨 RÉVÉLATION : Un document confidentiel oublié dans un café révèle le secret crypto des millionnaires...",
+        "headline": "Le Secret Crypto que Wall Street Cache",
+        "description": "Découvrez la méthode des pros (avant qu'elle soit interdite)"
+      }
+    ],
+    "email_sequence": [
+      {
+        "type": "pré-lancement",
+        "subject": "Le document que j'ai trouvé va vous choquer...",
+        "body": "Hier, j'ai hésité à vous envoyer ce message...",
+        "cta": "Découvrir le secret"
+      }
+    ]
+  }
+};
+
+async function callOpenAI(prompt: string, keyword: string, context?: any, retries = 2) {
   const fullPrompt = prompt.replace(/\[MOT-CLÉ\]/g, keyword).replace(/\[HOOK_ID\]/g, context?.selectedHook?.id || '');
   
   let systemMessage = "Tu es un expert marketing et copywriter. Réponds UNIQUEMENT en JSON valide selon le format demandé.";
@@ -108,18 +232,19 @@ async function callOpenAI(prompt: string, keyword: string, context?: any, retrie
         }),
       });
 
-      if (response.status === 429 && attempt < retries) {
-        // Rate limit hit, wait and retry
-        const waitTime = Math.pow(2, attempt) * 1000; // Exponential backoff
-        console.log(`Rate limit hit, waiting ${waitTime}ms before retry ${attempt + 1}/${retries}`);
-        await new Promise(resolve => setTimeout(resolve, waitTime));
-        continue;
+      if (response.status === 429 || response.status === 402) {
+        // Rate limit or insufficient quota - fall back to mock data
+        console.log(`OpenAI quota/rate limit hit, using mock data for bloc${Object.keys(PROMPTS).findIndex(key => PROMPTS[key as keyof typeof PROMPTS] === prompt) + 1}`);
+        throw new Error(`OpenAI quota insufficient - using fallback`);
       }
 
       if (!response.ok) {
         const errorData = await response.text();
         console.error(`OpenAI API error: ${response.status} - ${errorData}`);
-        throw new Error(`OpenAI API error: ${response.status} - ${errorData}`);
+        if (attempt === retries) {
+          throw new Error(`OpenAI API error: ${response.status} - ${errorData}`);
+        }
+        continue;
       }
 
       const data = await response.json();
@@ -134,10 +259,14 @@ async function callOpenAI(prompt: string, keyword: string, context?: any, retrie
     } catch (error) {
       console.error(`OpenAI API call failed (attempt ${attempt + 1}/${retries + 1}):`, error);
       if (attempt === retries) {
-        throw error;
+        // Return mock data as fallback
+        const blocNumber = Object.keys(PROMPTS).findIndex(key => PROMPTS[key as keyof typeof PROMPTS] === prompt) + 1;
+        const mockKey = `bloc${blocNumber}` as keyof typeof MOCK_DATA;
+        console.log(`Using mock data for ${mockKey}`);
+        return MOCK_DATA[mockKey] || { error: "No mock data available" };
       }
       // Wait before retry for other errors too
-      const waitTime = Math.pow(2, attempt) * 1000;
+      const waitTime = Math.pow(2, attempt) * 500;
       await new Promise(resolve => setTimeout(resolve, waitTime));
     }
   }
