@@ -9,256 +9,323 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
+// Optimized prompts for better AI responses
 const PROMPTS = {
-  bloc1: `Vous êtes un agent d'analyse marché + scraping. Sujet = [MOT-CLÉ]. Parcourez web mondial (Google, Google Trends, Amazon/marketplaces, App Stores, YouTube, TikTok, Reddit, forums niche, Facebook Ads Library, pages produit concurrentes, reviews, top articles). Récupérez et synthétisez :
-1) Top 30 URLs / sources (titre + URL + 1 phrase résumé).
-2) Top 20 mots-clés / requêtes liées (avec intention : info/transactionnelle/navigation) + estimation de volume relatif (high/med/low).
-3) Top 10 produits concurrents (titre, prix, USP, format, reviews count, average rating).
-4) Top 10 peurs/objections des prospects (phrases textuelles réelles extraites des reviews/postings).
-5) Top 10 désirs / bénéfices recherchés.
-6) 5 angles marketing récurrents qui performent.
-7) 5 exemples d'annonces (texte + image/video description + datapoints si dispo).
-8) Signaux viraux (views, shares, comments) pour 5 posts/vidéos/articles.
-9) Prix d'ancrage historique (si existant) — range de 197$ à 2800$ ou autre.
-10) Recommandation rapide : 3 angles idéaux à tester en priorité.
-DONNEZ la sortie strictement en JSON avec les clefs suivantes :
-{ "keyword": "...", "top_urls":[{"title":"","url":"","snippet":""},...], "keywords":[{"kw":"","intent":"","relative_volume":""},...], "competitors":[{"name":"","price":"","format":"","USP":"","reviews":""},...], "pain_points":["..."], "desires":["..."], "angles":["..."], "ad_examples":[{"platform":"","copy":"","creative_description":"","metrics_if_any":""},...], "virality_signals":[{"url":"","metric":"views/shares/comments","value":""},...], "pricing_anchor":{"min":"","mid":"","max":""}, "recommendations":{"top_3_angles":["..."], "quick_action":"..."}, "sources":["url1","url2",...] }
-Si vous ne pouvez pas accéder au web, indiquez-le clairement et générez la meilleure synthèse à partir de vos connaissances en précisant la date de connaissance.`,
+  bloc1: `Tu es un expert analyste marché. Analyse le mot-clé "[MOT-CLÉ]" et génère un rapport marketing complet.
 
-  bloc2: `Tu es un expert copywriter AGORA-style + neuromarketing. Reçois la sortie JSON du Bloc 1 (contexte). Pour le mot-clé [MOT-CLÉ], génère 5 variantes complètes de hook/storytelling.
-Pour chaque variante fournis :
-{ "id": "hook_1", "title": "Titre commercial court (6–10 mots)", "one_line_tagline": "sous-titre choc (1 phrase)", "origin_story": "récit court (40–90 mots) — mythe/autorité/historique", "proof_of_value": "preuve/valeur choquante (ex: j'ai payé 2800$, réservé à X)", "core_benefit": "bénéfice émotionnel (1 ligne)", "cliffhanger": "ligne qui tease ce qui est dans le doc sans le révéler", "emotional_triggers":[ "curiosity","fear_of_missing_out","status","shame" ], "recommended_thumbnail_text": "5–6 mots", "tone": "ex : dramatique / mystérieux / autoritaire", "recommended_tests":["headlineA / headlineB"] }
-Règles :
-- Ne pas affirmer de faits historiques impossibles à vérifier; marquer "réclamation non vérifiée" si spéculatif.
-- Prioriser angles listés dans bloc1.recommendations.top_3_angles.
-- Produire 3 titres alternatifs par hook.`,
-
-  bloc3: `Tu es un head copywriter & content creator. Utilise le hook choisi (HOOK_ID) et le contexte (bloc1 json). Génère :
-1) Une page de vente courte (titre, sous-titre, 3 bullets, prix d'appel).
-2) Le PDF complet : sections détaillées :
-- Avant-propos (150–250 mots) : histoire personnelle + preuve.
-- Introduction (200–300 mots) : promesse + transformation.
-- Chapitre 1 (800–1200 mots) : mythe/secret expliqué + extrait historique/fiction encadrée.
-- Chapitre 2 (800–1200 mots) : explication moderne/scientifique + études/sources (si dispo).
-- Chapitre 3 (1200–2000 mots) : méthode étape-par-étape (exercices journaliers, templates, scripts).
-- Chapitre 4 (600–1000 mots) : cas pratiques / témoignages (3 exemples).
-- Conclusion + plan d'action (200–300 mots).
-3) Pour chaque chapitre, fournis :
-- Objectif pédagogique
-- 5 points clés (bullet)
-- 2 exercices précis (avec format, durée)
-- Suggestion d'image/graphique + légende
-4) Génère aussi une version "copy-paste" prête à l'emploi (texte brut) pour chaque section.
-Livrer en JSON :
-{ "sales_header":{...}, "pdf":[{"chapter_title":"","word_count":n,"text":"...","key_points":[...],"exercises":[...],"image_suggestion":""},...] }`,
-
-  bloc4: `En te basant sur la structure du PDF (Bloc3), génère 4 bonus complémentaires qui augmentent la valeur perçue et la conversion.
-Pour chaque bonus fournis :
-{ "id":"bonus1", "title":"", "format":"audio/pdf/video/checklist/journal", "purpose":"quel besoin il couvre", "deliverable_description":"détail précis (durée, nombre de pages, template)", "script_or_transcript":"texte complet si audio/video (ou checklist items)", "filename_suggested":"", "cta_to_pdf":"phrase pour relier vers le produit principal" }
-Propose aussi 1 order bump (prix, description) et 1 downsell (si client refuse).`,
-
-  bloc5: `Tu es un consultant pricing & funnel. Pour le produit décrit (résumé envoyé), fournis :
-1) 3 options de tarification (entry / core / premium) avec justification (valeur perçue, ancrage, prix concours).
-2) Prix d'ancrage (liste de références et phrases d'ancrage ex: "valeur réelle 2400$, aujourd'hui 17$").
-3) Structure d'offre : order bump, upsell 1 (ex: coaching 1:1), upsell 2 (mini-cours avancé).
-4) Texte exact pour le bandeau prix sur landing (headline + subline).
-5) Règles scarcity et scripts (ex : "97 copies", "offre limitée à X heures") — et une version éthique (vérifiable).
-6) Suggestion de garantie (days refund + copy) et conditions légales minimales (ex: pas de garanties médicales).
-7) 5 idées de tests A/B (variation prix, bonus, headline).
-8) Estimation KPI hypothétique (assumptions pour CVR 1%, 3%, 5% pour simulation).
-Retour en JSON :
-{ "pricing_tiers":[{"name":"","price":"","justification":""},...], "order_bump":{"title":"","price":""}, "upsells":[...], "scarcity_phrases":[...], "guarantee_text":"..." }`,
-
-  bloc6: `Tu es un growth marketer. Avec le hook [HOOK_ID], le PDF (Bloc3) et l'offre (Bloc5), fournis :
-1) 3 variantes d'ad copy FB/IG (primary text, headline, description) + 3 propositions de visuels (thumbnail text, image idea).
-2) 3 scripts TikTok/YouTube Shorts (30–45s) + plan de scènes (5 cuts).
-3) 7 emails : pré-lancement (2), lancement (2), relance (2), dernière chance (1) — objet + corps + CTA.
-4) 5 captions instagram + 10 hashtags recommandés (par marché).
-5) Brief créatif pour designer (dimensions, accroche, assets à fournir).
-6) UTM template examples pour tracking.
-7) Checklist technique pour lancer la campagne (pixel, conversion API, landing speed, checkout).
-Retour formats : JSON + dossiers texte pour chaque asset.`
-};
-
-// Mock data for each bloc when OpenAI is not available
-const MOCK_DATA = {
-  bloc1: {
-    "keyword": "crypto",
-    "top_urls": [
-      {"title": "Top Crypto Trading Platform", "url": "https://example.com/crypto1", "snippet": "Leading platform for crypto trading"},
-      {"title": "Crypto Investment Guide", "url": "https://example.com/crypto2", "snippet": "Complete guide to crypto investing"}
-    ],
-    "keywords": [
-      {"kw": "bitcoin trading", "intent": "transactional", "relative_volume": "high"},
-      {"kw": "crypto investment", "intent": "informational", "relative_volume": "high"}
-    ],
-    "competitors": [
-      {"name": "CryptoMax Pro", "price": "$297", "format": "PDF + Video", "USP": "Secret trading signals", "reviews": "4.8/5 (1200 reviews)"}
-    ],
-    "pain_points": ["Losing money on bad trades", "Don't understand technical analysis"],
-    "desires": ["Make consistent profits", "Learn professional trading strategies"],
-    "angles": ["Secret insider trading method", "AI-powered trading signals"],
-    "ad_examples": [
-      {"platform": "Facebook", "copy": "Découvrez les secrets que les pros ne veulent pas que vous sachiez", "creative_description": "Dark trading screen with green profit charts", "metrics_if_any": "CTR 3.2%"}
-    ],
-    "virality_signals": [
-      {"url": "https://youtube.com/crypto-secret", "metric": "views", "value": "2.3M"}
-    ],
-    "pricing_anchor": {"min": "97", "mid": "297", "max": "997"},
-    "recommendations": {
-      "top_3_angles": ["Secret method", "AI trading", "Professional signals"],
-      "quick_action": "Focus on the mystery/secret angle first"
-    },
-    "sources": ["coindesk.com", "cointelegraph.com"]
+STRUCTURE JSON REQUISE (répondre UNIQUEMENT en JSON valide) :
+{
+  "keyword": "[MOT-CLÉ]",
+  "market_analysis": {
+    "market_size": "estimation du marché",
+    "trends": ["tendance 1", "tendance 2", "tendance 3"],
+    "opportunities": ["opportunité 1", "opportunité 2"]
   },
-  
-  bloc2: [
+  "competitors": [
+    {
+      "name": "nom concurrent",
+      "price": "prix",
+      "format": "format du produit",
+      "usp": "proposition de valeur unique",
+      "reviews": "4.5/5 (200 avis)"
+    }
+  ],
+  "target_audience": {
+    "demographics": "description démographique",
+    "pain_points": ["douleur 1", "douleur 2", "douleur 3"],
+    "desires": ["désir 1", "désir 2", "désir 3"]
+  },
+  "keywords": [
+    {
+      "keyword": "mot-clé",
+      "intent": "informational/transactional/navigational",
+      "volume": "high/medium/low"
+    }
+  ],
+  "pricing_anchor": {
+    "min": "97",
+    "optimal": "197", 
+    "premium": "497"
+  },
+  "top_angles": ["angle 1", "angle 2", "angle 3"]
+}
+
+Analyse approfondie pour "${keyword}" et fournis des données réalistes basées sur ton expertise.`,
+
+  bloc2: `Tu es un copywriter expert style AGORA. Utilise le contexte de recherche marché pour créer 5 hooks émotionnels.
+
+CONTEXTE DE RECHERCHE: {{RESEARCH_CONTEXT}}
+
+Génère 5 hooks pour le mot-clé "[MOT-CLÉ]":
+
+{
+  "hooks": [
     {
       "id": "hook_1",
-      "title": "Le Secret Crypto des Millionnaires",
-      "one_line_tagline": "La méthode cachée que Wall Street ne veut pas révéler",
-      "origin_story": "En 2019, j'ai découvert par hasard un document confidentiel abandonné dans un café près de Goldman Sachs. Ce document révélait une stratégie crypto utilisée exclusivement par les grandes institutions.",
-      "proof_of_value": "J'ai payé 15,000$ à un trader institutionnel pour ces informations",
-      "core_benefit": "Générer des profits constants même dans un marché volatile",
-      "cliffhanger": "Ce que vous allez découvrir va changer votre façon de voir le trading crypto pour toujours",
+      "title": "Titre accrocheur (6-8 mots)",
+      "tagline": "Sous-titre émotionnel (1 phrase)",
+      "origin_story": "Histoire d'origine captivante (60-80 mots)",
+      "proof_element": "Élément de preuve/autorité",
+      "core_benefit": "Bénéfice principal émotionnel",
+      "cliffhanger": "Phrase qui crée du suspense",
       "emotional_triggers": ["curiosity", "fear_of_missing_out", "status"],
-      "recommended_thumbnail_text": "SECRET CRYPTO RÉVÉLÉ",
-      "tone": "mystérieux",
-      "recommended_tests": ["Le Secret Crypto", "Méthode Wall Street"]
+      "tone": "dramatique/mystérieux/autoritaire"
     }
-  ],
-  
-  bloc3: {
-    "sales_header": {
-      "title": "Le Secret Crypto des Millionnaires",
-      "subtitle": "La méthode cachée que Wall Street ne veut pas révéler",
-      "bullets": [
-        "Découvrez la stratégie secrète des institutions",
-        "Générez des profits constants en crypto",
-        "Évitez les pièges des traders amateurs"
-      ],
-      "price": "97€"
-    },
-    "pdf": [
+  ]
+}
+
+Utilise les pain_points et desires du contexte pour créer des hooks émotionnellement impactants.`,
+
+  bloc3: `Tu es un expert en création de produits digitaux. Crée la structure complète du PDF en utilisant le hook sélectionné.
+
+CONTEXTE COMPLET: {{FULL_CONTEXT}}
+HOOK SÉLECTIONNÉ: {{SELECTED_HOOK}}
+
+Génère:
+
+{
+  "sales_page": {
+    "headline": "titre principal basé sur le hook",
+    "subheadline": "sous-titre de conversion",
+    "bullets": ["bénéfice 1", "bénéfice 2", "bénéfice 3"],
+    "price": "prix basé sur l'ancrage du bloc 1"
+  },
+  "pdf_structure": {
+    "title": "titre du PDF",
+    "chapters": [
       {
-        "chapter_title": "Introduction : Le Document Confidentiel",
-        "word_count": 250,
-        "text": "Tout a commencé par hasard dans un café de Manhattan...",
-        "key_points": [
-          "Découverte du document secret",
-          "Validation des informations",
-          "Premiers résultats"
-        ],
+        "title": "Titre du chapitre",
+        "objective": "objectif pédagogique",
+        "content_outline": "plan détaillé du contenu",
+        "word_count": 800,
+        "key_points": ["point 1", "point 2", "point 3"],
         "exercises": [
-          {"title": "Audit de votre portefeuille actuel", "format": "checklist", "duration": "15 min"}
-        ],
-        "image_suggestion": "Photo d'un document confidentiel sur une table de café"
-      }
-    ]
-  },
-  
-  bloc4: [
-    {
-      "id": "bonus1",
-      "title": "Calculateur de Risque Crypto",
-      "format": "pdf",
-      "purpose": "Calculer précisément le risque de chaque trade",
-      "deliverable_description": "Template Excel + guide d'utilisation (5 pages)",
-      "script_or_transcript": "Guide complet pour utiliser le calculateur...",
-      "filename_suggested": "calculateur-risque-crypto.pdf",
-      "cta_to_pdf": "Utilisez ce calculateur avec la méthode principale"
-    }
-  ],
-  
-  bloc5: {
-    "pricing_tiers": [
-      {"name": "Essentiel", "price": "67€", "justification": "Prix d'entrée accessible"},
-      {"name": "Complet", "price": "97€", "justification": "Valeur optimale rapport qualité/prix"},
-      {"name": "Premium", "price": "197€", "justification": "Avec bonus exclusifs"}
-    ],
-    "order_bump": {"title": "Guide des Altcoins Secrets", "price": "27€"},
-    "upsells": [
-      {"title": "Coaching 1:1", "price": "497€", "description": "Session personnalisée de 1h"}
-    ],
-    "scarcity_phrases": ["Seulement 100 copies disponibles", "Offre limitée 48h"],
-    "guarantee_text": "Garantie satisfait ou remboursé 30 jours"
-  },
-  
-  bloc6: {
-    "ad_copy": [
-      {
-        "platform": "Facebook",
-        "primary_text": "🚨 RÉVÉLATION : Un document confidentiel oublié dans un café révèle le secret crypto des millionnaires...",
-        "headline": "Le Secret Crypto que Wall Street Cache",
-        "description": "Découvrez la méthode des pros (avant qu'elle soit interdite)"
-      }
-    ],
-    "email_sequence": [
-      {
-        "type": "pré-lancement",
-        "subject": "Le document que j'ai trouvé va vous choquer...",
-        "body": "Hier, j'ai hésité à vous envoyer ce message...",
-        "cta": "Découvrir le secret"
+          {
+            "title": "nom exercice",
+            "description": "description détaillée",
+            "duration": "15 minutes"
+          }
+        ]
       }
     ]
   }
+}
+
+Assure-toi que le contenu soit cohérent avec le hook sélectionné et les insights du bloc 1.`,
+
+  bloc4: `Crée 4 bonus complémentaires qui augmentent la valeur perçue du produit principal.
+
+CONTEXTE: {{FULL_CONTEXT}}
+
+{
+  "bonuses": [
+    {
+      "id": "bonus_1",
+      "title": "Titre du bonus",
+      "format": "pdf/audio/video/checklist",
+      "value_proposition": "Pourquoi ce bonus est précieux",
+      "description": "Description détaillée (2-3 phrases)",
+      "deliverable": "Ce que reçoit exactement le client",
+      "connection_to_main": "Comment il complète le produit principal"
+    }
+  ],
+  "order_bump": {
+    "title": "Titre de l'order bump",
+    "price": "27€",
+    "description": "Description courte et impactante"
+  }
+}`,
+
+  bloc5: `Tu es un consultant pricing. Optimise la stratégie tarifaire basée sur tous les éléments précédents.
+
+CONTEXTE COMPLET: {{FULL_CONTEXT}}
+
+{
+  "pricing_strategy": {
+    "main_price": "197€",
+    "justification": "Pourquoi ce prix est optimal",
+    "value_stack": [
+      "Produit principal (valeur €)",
+      "Bonus 1 (valeur €)",
+      "Bonus 2 (valeur €)"
+    ],
+    "total_value": "997€",
+    "savings": "800€"
+  },
+  "scarcity_elements": [
+    "Seulement 100 copies disponibles",
+    "Offre limitée 48h"
+  ],
+  "guarantee": {
+    "duration": "30 jours",
+    "copy": "Texte de garantie persuasif"
+  },
+  "upsells": [
+    {
+      "title": "Upsell 1",
+      "price": "97€",
+      "description": "Description de l'upsell"
+    }
+  ]
+}`,
+
+  bloc6: `Crée tous les assets marketing pour promouvoir le produit.
+
+CONTEXTE COMPLET: {{FULL_CONTEXT}}
+
+{
+  "facebook_ads": [
+    {
+      "primary_text": "Texte principal Facebook (hook émotionnel)",
+      "headline": "Titre publicitaire",
+      "description": "Description courte",
+      "visual_suggestion": "Suggestion de visuel"
+    }
+  ],
+  "email_sequence": [
+    {
+      "email_number": 1,
+      "subject": "Objet de l'email",
+      "type": "pré-lancement/lancement/relance",
+      "body": "Corps de l'email (150-200 mots)",
+      "cta": "Call-to-action"
+    }
+  ],
+  "video_scripts": [
+    {
+      "platform": "TikTok/YouTube Shorts",
+      "duration": "30 secondes",
+      "script": "Script complet avec indications scènes",
+      "scenes": ["Scène 1: ...", "Scène 2: ..."]
+    }
+  ],
+  "landing_page_copy": {
+    "sections": [
+      {
+        "section": "Hero",
+        "copy": "Texte de la section hero"
+      }
+    ]
+  }
+}`
 };
 
-async function callHuggingFace(prompt: string, keyword: string, context?: any, retries = 2) {
-  const fullPrompt = prompt.replace(/\[MOT-CLÉ\]/g, keyword).replace(/\[HOOK_ID\]/g, context?.selectedHook?.id || '');
-  
-  let systemMessage = "Tu es un expert marketing et copywriter. Réponds UNIQUEMENT en JSON valide selon le format demandé.";
-  let userMessage = fullPrompt;
-  
-  if (context) {
-    userMessage += `\n\nContexte précédent: ${JSON.stringify(context)}`;
+async function generateWithAI(prompt: string, keyword: string, context: any = null): Promise<any> {
+  if (!hfToken) {
+    throw new Error('HUGGING_FACE_ACCESS_TOKEN not configured');
   }
 
   const hf = new HfInference(hfToken);
+  
+  // Prepare the complete prompt with context
+  let fullPrompt = prompt.replace(/\[MOT-CLÉ\]/g, keyword);
+  
+  // Inject context into prompt
+  if (context) {
+    fullPrompt = fullPrompt.replace('{{RESEARCH_CONTEXT}}', JSON.stringify(context.research || {}));
+    fullPrompt = fullPrompt.replace('{{SELECTED_HOOK}}', JSON.stringify(context.selectedHook || {}));
+    fullPrompt = fullPrompt.replace('{{FULL_CONTEXT}}', JSON.stringify(context));
+  }
 
-  for (let attempt = 0; attempt <= retries; attempt++) {
-    try {
-      const response = await hf.textGeneration({
-        model: 'meta-llama/Llama-3.1-8B-Instruct',
-        inputs: `${systemMessage}\n\nUser: ${userMessage}\n\nAssistant:`,
-        parameters: {
-          max_new_tokens: 4000,
-          temperature: 0.7,
-          do_sample: true,
-        },
-      });
+  const systemMessage = `Tu es un expert marketing et copywriter. Tu DOIS répondre UNIQUEMENT en JSON valide, sans texte avant ou après. Le JSON doit être parsable directement.`;
+  
+  try {
+    console.log(`Generating content for keyword: ${keyword}`);
+    console.log(`Prompt length: ${fullPrompt.length}`);
+    
+    const response = await hf.textGeneration({
+      model: 'meta-llama/Llama-3.1-8B-Instruct',
+      inputs: `<|begin_of_text|><|start_header_id|>system<|end_header_id|>
+${systemMessage}<|eot_id|><|start_header_id|>user<|end_header_id|>
+${fullPrompt}<|eot_id|><|start_header_id|>assistant<|end_header_id|>`,
+      parameters: {
+        max_new_tokens: 3000,
+        temperature: 0.7,
+        do_sample: true,
+        top_p: 0.9,
+        repetition_penalty: 1.1,
+      },
+    });
 
-      const content = response.generated_text.split('Assistant:')[1]?.trim() || response.generated_text;
-      
-      // Try to parse as JSON, if it fails return as text
-      try {
-        const parsed = JSON.parse(content);
-        return parsed;
-      } catch {
-        // Try to extract JSON from the response if it's wrapped in other text
-        const jsonMatch = content.match(/\{[\s\S]*\}/);
-        if (jsonMatch) {
-          try {
-            return JSON.parse(jsonMatch[0]);
-          } catch {
-            return { raw_content: content };
-          }
-        }
-        return { raw_content: content };
-      }
-    } catch (error) {
-      console.error(`Hugging Face API call failed (attempt ${attempt + 1}/${retries + 1}):`, error);
-      if (attempt === retries) {
-        // Return mock data as fallback
-        const blocNumber = Object.keys(PROMPTS).findIndex(key => PROMPTS[key as keyof typeof PROMPTS] === prompt) + 1;
-        const mockKey = `bloc${blocNumber}` as keyof typeof MOCK_DATA;
-        console.log(`Using mock data for ${mockKey}`);
-        return MOCK_DATA[mockKey] || { error: "No mock data available" };
-      }
-      // Wait before retry
-      const waitTime = Math.pow(2, attempt) * 500;
-      await new Promise(resolve => setTimeout(resolve, waitTime));
+    let content = response.generated_text;
+    
+    // Extract content after the assistant header
+    const assistantStart = content.lastIndexOf('<|start_header_id|>assistant<|end_header_id|>');
+    if (assistantStart !== -1) {
+      content = content.substring(assistantStart + '<|start_header_id|>assistant<|end_header_id|>'.length).trim();
     }
+    
+    // Remove any trailing tokens
+    content = content.replace(/<\|eot_id\|>.*$/s, '').trim();
+    
+    console.log(`Raw AI response: ${content.substring(0, 200)}...`);
+    
+    // Try to extract and parse JSON
+    let jsonMatch = content.match(/\{[\s\S]*\}/);
+    if (!jsonMatch) {
+      // If no JSON found, try to find it in different patterns
+      const patterns = [
+        /```json\s*(\{[\s\S]*?\})\s*```/,
+        /```\s*(\{[\s\S]*?\})\s*```/,
+        /(\{[\s\S]*\})/
+      ];
+      
+      for (const pattern of patterns) {
+        const match = content.match(pattern);
+        if (match) {
+          jsonMatch = [match[1]];
+          break;
+        }
+      }
+    }
+    
+    if (jsonMatch) {
+      try {
+        const parsed = JSON.parse(jsonMatch[0]);
+        console.log('Successfully parsed JSON response');
+        return parsed;
+      } catch (parseError) {
+        console.error('JSON parse error:', parseError);
+        console.error('Content to parse:', jsonMatch[0]);
+      }
+    }
+    
+    // If JSON parsing fails, create a structured response based on the content
+    console.log('Creating fallback structured response');
+    return createFallbackResponse(content, keyword);
+    
+  } catch (error) {
+    console.error('AI generation error:', error);
+    throw new Error(`Erreur génération IA: ${error.message}`);
+  }
+}
+
+function createFallbackResponse(content: string, keyword: string): any {
+  // Create a basic structured response when JSON parsing fails
+  return {
+    keyword: keyword,
+    content: content,
+    generated: true,
+    note: "Réponse générée par IA - structure adaptée automatiquement"
+  };
+}
+
+async function processBlock(blockNumber: number, keyword: string, context: any): Promise<any> {
+  const prompt = PROMPTS[`bloc${blockNumber}` as keyof typeof PROMPTS];
+  
+  if (!prompt) {
+    throw new Error(`Bloc ${blockNumber} non défini`);
+  }
+  
+  console.log(`Processing bloc ${blockNumber} for keyword: ${keyword}`);
+  
+  try {
+    const result = await generateWithAI(prompt, keyword, context);
+    console.log(`Bloc ${blockNumber} processed successfully`);
+    return result;
+  } catch (error) {
+    console.error(`Error processing bloc ${blockNumber}:`, error);
+    throw error;
   }
 }
 
@@ -270,26 +337,44 @@ serve(async (req) => {
   try {
     const { bloc, keyword, context } = await req.json();
     
-    console.log(`Generating bloc ${bloc} for keyword: ${keyword}`);
+    console.log(`=== Processing Bloc ${bloc} ===`);
+    console.log(`Keyword: ${keyword}`);
+    console.log(`Context keys: ${context ? Object.keys(context) : 'none'}`);
     
-    if (!PROMPTS[`bloc${bloc}` as keyof typeof PROMPTS]) {
-      throw new Error(`Invalid bloc: ${bloc}`);
+    if (!keyword || !keyword.trim()) {
+      throw new Error('Mot-clé requis');
+    }
+    
+    if (!bloc || bloc < 1 || bloc > 6) {
+      throw new Error('Numéro de bloc invalide (1-6)');
     }
 
-    const prompt = PROMPTS[`bloc${bloc}` as keyof typeof PROMPTS];
-    const result = await callHuggingFace(prompt, keyword, context);
+    if (!hfToken) {
+      throw new Error('API Hugging Face non configurée');
+    }
+
+    const result = await processBlock(bloc, keyword.trim(), context);
     
-    console.log(`Generated result for bloc ${bloc}:`, result);
+    console.log(`=== Bloc ${bloc} completed successfully ===`);
     
-    return new Response(JSON.stringify({ success: true, data: result }), {
+    return new Response(JSON.stringify({ 
+      success: true, 
+      data: result,
+      metadata: {
+        bloc: bloc,
+        keyword: keyword,
+        generated_at: new Date().toISOString()
+      }
+    }), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });
     
   } catch (error) {
-    console.error('Error in generate-pipeline function:', error);
+    console.error('=== Pipeline Error ===', error);
     return new Response(JSON.stringify({ 
       success: false, 
-      error: error.message 
+      error: error.message,
+      details: error.stack 
     }), {
       status: 500,
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
