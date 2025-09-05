@@ -1,7 +1,8 @@
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { HfInference } from 'https://esm.sh/@huggingface/inference@2.3.2'
 
-const openAIApiKey = Deno.env.get('OPENAI_API_KEY');
+const hfToken = Deno.env.get('HUGGING_FACE_ACCESS_TOKEN');
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -203,7 +204,7 @@ const MOCK_DATA = {
   }
 };
 
-async function callOpenAI(prompt: string, keyword: string, context?: any, retries = 2) {
+async function callHuggingFace(prompt: string, keyword: string, context?: any, retries = 2) {
   const fullPrompt = prompt.replace(/\[MOT-CLÉ\]/g, keyword).replace(/\[HOOK_ID\]/g, context?.selectedHook?.id || '');
   
   let systemMessage = "Tu es un expert marketing et copywriter. Réponds UNIQUEMENT en JSON valide selon le format demandé.";
@@ -213,51 +214,40 @@ async function callOpenAI(prompt: string, keyword: string, context?: any, retrie
     userMessage += `\n\nContexte précédent: ${JSON.stringify(context)}`;
   }
 
+  const hf = new HfInference(hfToken);
+
   for (let attempt = 0; attempt <= retries; attempt++) {
     try {
-      const response = await fetch('https://api.openai.com/v1/chat/completions', {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${openAIApiKey}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          model: 'gpt-4o',
-          messages: [
-            { role: 'system', content: systemMessage },
-            { role: 'user', content: userMessage }
-          ],
-          max_tokens: 4000,
+      const response = await hf.textGeneration({
+        model: 'meta-llama/Llama-3.1-8B-Instruct',
+        inputs: `${systemMessage}\n\nUser: ${userMessage}\n\nAssistant:`,
+        parameters: {
+          max_new_tokens: 4000,
           temperature: 0.7,
-        }),
+          do_sample: true,
+        },
       });
 
-      if (response.status === 429 || response.status === 402) {
-        // Rate limit or insufficient quota - fall back to mock data
-        console.log(`OpenAI quota/rate limit hit, using mock data for bloc${Object.keys(PROMPTS).findIndex(key => PROMPTS[key as keyof typeof PROMPTS] === prompt) + 1}`);
-        throw new Error(`OpenAI quota insufficient - using fallback`);
-      }
-
-      if (!response.ok) {
-        const errorData = await response.text();
-        console.error(`OpenAI API error: ${response.status} - ${errorData}`);
-        if (attempt === retries) {
-          throw new Error(`OpenAI API error: ${response.status} - ${errorData}`);
-        }
-        continue;
-      }
-
-      const data = await response.json();
-      const content = data.choices[0].message.content;
+      const content = response.generated_text.split('Assistant:')[1]?.trim() || response.generated_text;
       
       // Try to parse as JSON, if it fails return as text
       try {
-        return JSON.parse(content);
+        const parsed = JSON.parse(content);
+        return parsed;
       } catch {
+        // Try to extract JSON from the response if it's wrapped in other text
+        const jsonMatch = content.match(/\{[\s\S]*\}/);
+        if (jsonMatch) {
+          try {
+            return JSON.parse(jsonMatch[0]);
+          } catch {
+            return { raw_content: content };
+          }
+        }
         return { raw_content: content };
       }
     } catch (error) {
-      console.error(`OpenAI API call failed (attempt ${attempt + 1}/${retries + 1}):`, error);
+      console.error(`Hugging Face API call failed (attempt ${attempt + 1}/${retries + 1}):`, error);
       if (attempt === retries) {
         // Return mock data as fallback
         const blocNumber = Object.keys(PROMPTS).findIndex(key => PROMPTS[key as keyof typeof PROMPTS] === prompt) + 1;
@@ -265,7 +255,7 @@ async function callOpenAI(prompt: string, keyword: string, context?: any, retrie
         console.log(`Using mock data for ${mockKey}`);
         return MOCK_DATA[mockKey] || { error: "No mock data available" };
       }
-      // Wait before retry for other errors too
+      // Wait before retry
       const waitTime = Math.pow(2, attempt) * 500;
       await new Promise(resolve => setTimeout(resolve, waitTime));
     }
@@ -287,7 +277,7 @@ serve(async (req) => {
     }
 
     const prompt = PROMPTS[`bloc${bloc}` as keyof typeof PROMPTS];
-    const result = await callOpenAI(prompt, keyword, context);
+    const result = await callHuggingFace(prompt, keyword, context);
     
     console.log(`Generated result for bloc ${bloc}:`, result);
     
