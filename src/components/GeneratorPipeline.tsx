@@ -5,7 +5,8 @@ import { Input } from '@/components/ui/input';
 import { Card } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
 import { useToast } from '@/hooks/use-toast';
-import { Sparkles, Wand2, TrendingUp, FileText, Gift, DollarSign, Megaphone } from 'lucide-react';
+import { useAuth } from '@/contexts/AuthContext';
+import { Sparkles, Wand2, TrendingUp, FileText, Gift, DollarSign, Megaphone, LogOut, User } from 'lucide-react';
 import { BlockContainer } from './BlockContainer';
 import { ResearchBlock } from './blocks/ResearchBlock';
 import { HooksBlock } from './blocks/HooksBlock';
@@ -43,6 +44,7 @@ const PIPELINE_STEPS = [
 export const GeneratorPipeline = () => {
   const { toast } = useToast();
   const navigate = useNavigate();
+  const { user, signOut } = useAuth();
   const [state, setState] = useState<PipelineState>({
     isGenerating: false,
     currentStep: -1,
@@ -163,6 +165,22 @@ export const GeneratorPipeline = () => {
     });
   };
 
+  const handleSignOut = async () => {
+    const { error } = await signOut();
+    if (error) {
+      toast({
+        title: "Erreur",
+        description: "Impossible de se déconnecter",
+        variant: "destructive"
+      });
+    } else {
+      toast({
+        title: "Déconnexion",
+        description: "À bientôt !"
+      });
+    }
+  };
+
   const progress = state.isGenerating ? ((state.currentStep + 1) / PIPELINE_STEPS.length) * 100 : 0;
 
   return (
@@ -170,6 +188,26 @@ export const GeneratorPipeline = () => {
       {/* Hero Section */}
       <div className="relative overflow-hidden bg-gradient-hero border-b border-border">
         <div className="absolute inset-0 bg-gradient-primary opacity-10" />
+        
+        {/* User Menu */}
+        <div className="absolute top-4 right-4">
+          <div className="flex items-center gap-4">
+            <div className="flex items-center gap-2 text-sm text-muted-foreground">
+              <User className="w-4 h-4" />
+              {user?.email}
+            </div>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={handleSignOut}
+              className="text-muted-foreground hover:text-foreground"
+            >
+              <LogOut className="w-4 h-4 mr-2" />
+              Déconnexion
+            </Button>
+          </div>
+        </div>
+        
         <div className="relative max-w-6xl mx-auto px-6 py-16">
           <div className="text-center space-y-6">
             <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 border border-primary/20 rounded-full text-sm text-primary">
