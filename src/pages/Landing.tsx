@@ -4,6 +4,7 @@ import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Separator } from '@/components/ui/separator';
+import { useAuth } from '@/contexts/AuthContext';
 import { 
   Sparkles, 
   Wand2, 
@@ -22,10 +23,13 @@ import {
   Check, 
   Play,
   ChevronDown,
-  Plus
+  Plus,
+  LogOut,
+  User
 } from 'lucide-react';
 
 const Landing = () => {
+  const { user, signOut } = useAuth();
   const testimonials = [
     { name: "Marie Dubois", avatar: "MD", role: "E-commerce Entrepreneur", revenue: "€50K/mois" },
     { name: "Pierre Martin", avatar: "PM", role: "Dropshipper", revenue: "€25K/mois" },
@@ -162,12 +166,36 @@ const Landing = () => {
           </div>
           <div className="flex flex-1 items-center justify-between space-x-2 md:justify-end">
             <div className="w-full flex-1 md:w-auto md:flex-none">
-              <Button variant="ghost" size="sm" asChild>
-                <Link to="/auth">Se connecter</Link>
-              </Button>
-              <Button size="sm" asChild>
-                <Link to="/auth">Commencer</Link>
-              </Button>
+              {user ? (
+                <div className="flex items-center gap-4">
+                  <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                    <User className="w-4 h-4" />
+                    {user.email}
+                  </div>
+                  <Button variant="ghost" size="sm" asChild>
+                    <Link to="/app">Dashboard</Link>
+                  </Button>
+                  <Button 
+                    variant="ghost" 
+                    size="sm" 
+                    onClick={async () => {
+                      await signOut();
+                    }}
+                  >
+                    <LogOut className="w-4 h-4 mr-1" />
+                    Déconnexion
+                  </Button>
+                </div>
+              ) : (
+                <>
+                  <Button variant="ghost" size="sm" asChild>
+                    <Link to="/auth">Se connecter</Link>
+                  </Button>
+                  <Button size="sm" asChild>
+                    <Link to="/auth">Commencer</Link>
+                  </Button>
+                </>
+              )}
             </div>
           </div>
         </div>
@@ -199,9 +227,9 @@ const Landing = () => {
                 className="h-14 px-8 bg-gradient-primary hover:shadow-glow transition-all duration-300 text-lg"
                 asChild
               >
-                <Link to="/auth">
+                <Link to={user ? "/app" : "/auth"}>
                   <Play className="w-5 h-5 mr-2" />
-                  Commencer Maintenant
+                  {user ? "Dashboard" : "Commencer Maintenant"}
                   <ArrowRight className="w-5 h-5 ml-2" />
                 </Link>
               </Button>

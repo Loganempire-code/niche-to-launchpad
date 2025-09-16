@@ -4,9 +4,10 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
+import { Separator } from '@/components/ui/separator';
 import { useToast } from '@/hooks/use-toast';
 import { useAuth } from '@/contexts/AuthContext';
-import { Eye, EyeOff, Sparkles, ArrowLeft } from 'lucide-react';
+import { Eye, EyeOff, Sparkles, ArrowLeft, Wand2 } from 'lucide-react';
 
 const Auth = () => {
   const [isLogin, setIsLogin] = useState(true);
@@ -127,15 +128,22 @@ const Auth = () => {
           <Button 
             variant="ghost" 
             onClick={() => navigate('/')}
-            className="mb-4 p-2"
+            className="mb-6 p-2 text-muted-foreground hover:text-foreground"
           >
             <ArrowLeft className="w-4 h-4 mr-2" />
             Retour à l'accueil
           </Button>
           
-          <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 border border-primary/20 rounded-full text-sm text-primary mb-4">
-            <Sparkles className="w-4 h-4" />
-            Générateur IA de Produits Viraux
+          <div className="mb-6">
+            <div className="inline-flex items-center gap-2 mb-4">
+              <Wand2 className="h-6 w-6 text-primary" />
+              <span className="font-bold text-xl">NicheLaunchpad</span>
+            </div>
+            
+            <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 border border-primary/20 rounded-full text-sm text-primary mb-4">
+              <Sparkles className="w-4 h-4" />
+              Générateur IA de Produits Viraux
+            </div>
           </div>
           
           <h1 className="text-3xl font-bold mb-2">
@@ -150,10 +158,10 @@ const Auth = () => {
         </div>
 
         {/* Auth Form */}
-        <Card className="p-6 bg-gradient-card border-border/50">
-          <form onSubmit={handleSubmit} className="space-y-4">
+        <Card className="p-8 bg-gradient-card border-border/50 shadow-xl">
+          <form onSubmit={handleSubmit} className="space-y-6">
             <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
+              <Label htmlFor="email" className="text-sm font-medium">Email</Label>
               <Input
                 id="email"
                 type="email"
@@ -161,12 +169,12 @@ const Auth = () => {
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="votre@email.com"
                 disabled={loading}
-                className="bg-card/50 border-border/50 focus:border-primary/50"
+                className="h-11 bg-card/50 border-border/50 focus:border-primary/50 transition-colors"
               />
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="password">Mot de passe</Label>
+              <Label htmlFor="password" className="text-sm font-medium">Mot de passe</Label>
               <div className="relative">
                 <Input
                   id="password"
@@ -175,13 +183,13 @@ const Auth = () => {
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••"
                   disabled={loading}
-                  className="bg-card/50 border-border/50 focus:border-primary/50 pr-10"
+                  className="h-11 bg-card/50 border-border/50 focus:border-primary/50 pr-11 transition-colors"
                 />
                 <Button
                   type="button"
                   variant="ghost"
                   size="sm"
-                  className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
+                  className="absolute right-0 top-0 h-11 px-3 hover:bg-transparent"
                   onClick={() => setShowPassword(!showPassword)}
                   disabled={loading}
                 >
@@ -196,7 +204,7 @@ const Auth = () => {
 
             {!isLogin && (
               <div className="space-y-2">
-                <Label htmlFor="confirmPassword">Confirmer le mot de passe</Label>
+                <Label htmlFor="confirmPassword" className="text-sm font-medium">Confirmer le mot de passe</Label>
                 <Input
                   id="confirmPassword"
                   type="password"
@@ -204,14 +212,14 @@ const Auth = () => {
                   onChange={(e) => setConfirmPassword(e.target.value)}
                   placeholder="••••••••"
                   disabled={loading}
-                  className="bg-card/50 border-border/50 focus:border-primary/50"
+                  className="h-11 bg-card/50 border-border/50 focus:border-primary/50 transition-colors"
                 />
               </div>
             )}
 
             <Button
               type="submit"
-              className="w-full bg-gradient-primary hover:shadow-glow transition-all duration-300"
+              className="w-full h-12 bg-gradient-primary hover:shadow-glow transition-all duration-300 text-base font-medium"
               disabled={loading}
             >
               {loading ? (
@@ -229,8 +237,10 @@ const Auth = () => {
           </form>
 
           {/* Toggle between login/signup */}
-          <div className="mt-6 text-center">
-            <p className="text-sm text-muted-foreground">
+          <Separator className="my-6" />
+          
+          <div className="text-center">
+            <p className="text-sm text-muted-foreground mb-3">
               {isLogin ? "Pas encore de compte ?" : "Déjà un compte ?"}
             </p>
             <Button
@@ -241,7 +251,7 @@ const Auth = () => {
                 setConfirmPassword('');
               }}
               disabled={loading}
-              className="text-primary hover:text-primary/80"
+              className="text-primary hover:text-primary/80 font-medium"
             >
               {isLogin ? "Créer un compte" : "Se connecter"}
             </Button>
@@ -249,10 +259,17 @@ const Auth = () => {
         </Card>
 
         {/* Info */}
-        <div className="mt-6 text-center text-sm text-muted-foreground">
+        <div className="mt-8 text-center text-sm text-muted-foreground">
           <p>
-            En vous inscrivant, vous acceptez nos conditions d'utilisation
-            et notre politique de confidentialité.
+            En vous {isLogin ? 'connectant' : 'inscrivant'}, vous acceptez nos{' '}
+            <Button variant="link" className="p-0 h-auto text-sm text-primary hover:underline">
+              conditions d'utilisation
+            </Button>
+            {' '}et notre{' '}
+            <Button variant="link" className="p-0 h-auto text-sm text-primary hover:underline">
+              politique de confidentialité
+            </Button>
+            .
           </p>
         </div>
       </div>
