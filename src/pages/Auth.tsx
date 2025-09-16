@@ -23,7 +23,7 @@ const Auth = () => {
   // Redirect authenticated users
   useEffect(() => {
     if (user) {
-      navigate('/', { replace: true });
+      navigate('/app', { replace: true });
     }
   }, [user, navigate]);
 
@@ -81,7 +81,7 @@ const Auth = () => {
             title: "Connexion réussie",
             description: "Bienvenue !"
           });
-          navigate('/', { replace: true });
+          navigate('/app', { replace: true });
         }
       } else {
         const { error } = await signUp(email, password);
