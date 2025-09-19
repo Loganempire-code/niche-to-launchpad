@@ -5,6 +5,10 @@ import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Separator } from '@/components/ui/separator';
 import { useAuth } from '@/contexts/AuthContext';
+import InteractiveDemo from '@/components/InteractiveDemo';
+import InteractiveTimeline from '@/components/InteractiveTimeline';
+import InteractiveComparison from '@/components/InteractiveComparison';
+import AnimatedTestimonials from '@/components/AnimatedTestimonials';
 import { 
   Sparkles, 
   Wand2, 
@@ -270,44 +274,9 @@ const Landing = () => {
               </Button>
             </div>
 
-            {/* Futuristic Interface Mockup */}
-            <div className="relative mx-auto max-w-6xl animate-slide-up" style={{animationDelay: '0.8s'}}>
-              <Card className="p-8 bg-gradient-glass backdrop-blur-xl border border-cyber-primary/20 shadow-glass relative overflow-hidden">
-                {/* Animated Border */}
-                <div className="absolute inset-0 rounded-lg overflow-hidden">
-                  <div className="absolute inset-0 bg-gradient-to-r from-cyber-primary/0 via-cyber-primary/20 to-cyber-primary/0 translate-x-[-100%] animate-[slide-right_3s_ease-in-out_infinite]"></div>
-                </div>
-                
-                <div className="flex items-center gap-3 mb-6">
-                  <div className="flex gap-2">
-                    <div className="w-4 h-4 rounded-full bg-destructive animate-pulse"></div>
-                    <div className="w-4 h-4 rounded-full bg-yellow-500 animate-pulse" style={{animationDelay: '0.5s'}}></div>
-                    <div className="w-4 h-4 rounded-full bg-cyber-primary animate-pulse" style={{animationDelay: '1s'}}></div>
-                  </div>
-                  <div className="flex-1 bg-background/20 rounded-xl px-4 py-2 text-sm text-cyber-primary text-center border border-cyber-primary/20">
-                    quantum://niche-launchpad.nexus/neural-generator
-                  </div>
-                  <div className="text-cyber-primary text-sm">Status: <span className="text-green-400">ONLINE</span></div>
-                </div>
-                
-                <div className="space-y-6">
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                    {winningProducts.map((product, i) => (
-                      <Card key={i} className="p-4 bg-gradient-glass border border-cyber-primary/10 hover:border-cyber-primary/30 transition-all duration-300 group">
-                        <div className="text-3xl mb-3 text-center group-hover:animate-float">{product.image}</div>
-                        <h4 className="font-semibold text-sm mb-2 text-center">{product.title}</h4>
-                        <div className="flex justify-between text-xs">
-                          <span className="text-cyber-primary font-bold">{product.price}</span>
-                          <span className="text-cyber-secondary">{product.sales}</span>
-                        </div>
-                        <div className="mt-2 h-1 bg-background/20 rounded-full overflow-hidden">
-                          <div className="h-full bg-gradient-primary animate-[width_2s_ease-in-out_infinite]" style={{width: `${60 + (i * 10)}%`}}></div>
-                        </div>
-                      </Card>
-                    ))}
-                  </div>
-                </div>
-              </Card>
+            {/* Interactive Demo */}
+            <div className="animate-slide-up" style={{animationDelay: '0.8s'}}>
+              <InteractiveDemo />
             </div>
           </div>
         </div>
@@ -349,8 +318,29 @@ const Landing = () => {
         </div>
       </section>
 
-      {/* Features with Immersive Cards */}
+      {/* Interactive Timeline Section */}
       <section className="py-32 relative">
+        <div className="container">
+          <InteractiveTimeline />
+        </div>
+      </section>
+
+      {/* Interactive Comparison Section */}
+      <section className="py-32 bg-gradient-glass relative">
+        <div className="container">
+          <InteractiveComparison />
+        </div>
+      </section>
+
+      {/* Animated Testimonials Section */}
+      <section className="py-32 relative">
+        <div className="container">
+          <AnimatedTestimonials />
+        </div>
+      </section>
+
+      {/* Features with Immersive Cards */}
+      <section className="py-32 bg-gradient-glass relative">
         <div className="container">
           <div className="text-center mb-20">
             <h2 className="text-4xl md:text-6xl font-bold mb-6">
