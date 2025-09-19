@@ -25,11 +25,21 @@ import {
   ChevronDown,
   Plus,
   LogOut,
-  User
+  User,
+  Cpu,
+  Atom,
+  Layers,
+  Brain,
+  Orbit,
+  Lightbulb,
+  Rocket,
+  Shield,
+  Globe
 } from 'lucide-react';
 
 const Landing = () => {
   const { user, signOut } = useAuth();
+
   const testimonials = [
     { name: "Marie Dubois", avatar: "MD", role: "E-commerce Entrepreneur", revenue: "€50K/mois" },
     { name: "Pierre Martin", avatar: "PM", role: "Dropshipper", revenue: "€25K/mois" },
@@ -39,129 +49,128 @@ const Landing = () => {
   ];
 
   const winningProducts = [
-    { title: "Guide Mindset Millionnaire", price: "€97", sales: "2.5K ventes", image: "📚" },
-    { title: "Formation E-commerce", price: "€297", sales: "1.8K ventes", image: "🛒" },
-    { title: "Pack Trading Crypto", price: "€197", sales: "3.2K ventes", image: "₿" },
-    { title: "Méthode Immobilier", price: "€497", sales: "950 ventes", image: "🏠" }
+    { title: "Guide Mindset Millionnaire", price: "€97", sales: "2.5K ventes", image: "🧠" },
+    { title: "Formation E-commerce", price: "€297", sales: "1.8K ventes", image: "🚀" },
+    { title: "Pack Trading Crypto", price: "€197", sales: "3.2K ventes", image: "⚡" },
+    { title: "Méthode Immobilier", price: "€497", sales: "950 ventes", image: "🌟" }
   ];
 
   const features = [
     { 
-      icon: Target, 
-      title: 'Recherche & Analyse Concurrence', 
-      desc: 'Scrapez et analysez automatiquement les produits qui cartonnent dans votre niche',
-      image: '🎯'
+      icon: Brain, 
+      title: 'IA Neuro-Analytique', 
+      desc: 'Analyse quantique des tendances avec réseaux de neurones avancés',
+      color: 'cyber-primary'
     },
     { 
-      icon: Sparkles, 
-      title: 'Hooks Émotionnels IA', 
-      desc: '5 hooks psychologiques type Agora générés pour maximiser les conversions',
-      image: '✨'
+      icon: Atom, 
+      title: 'Génération Atomique', 
+      desc: 'Création moléculaire de contenu viral par assemblage quantique',
+      color: 'cyber-secondary'
     },
     { 
-      icon: FileText, 
-      title: 'Structure PDF Complète', 
-      desc: 'Draft professionnel de votre produit digital avec plan détaillé',
-      image: '📄'
+      icon: Orbit, 
+      title: 'Orchestrateur Viral', 
+      desc: 'Système orbital de propagation automatique multi-plateforme',
+      color: 'cyber-tertiary'
     },
     { 
-      icon: Gift, 
-      title: 'Bonus Irrésistibles', 
-      desc: '3-5 bonus complémentaires pour augmenter la valeur perçue',
-      image: '🎁'
+      icon: Cpu, 
+      title: 'Processeur Marketing', 
+      desc: 'Unité de traitement parallèle pour campagnes omni-canal',
+      color: 'cyber-primary'
     },
     { 
-      icon: DollarSign, 
-      title: 'Pricing Optimisé', 
-      desc: 'Stratégie tarifaire data-driven basée sur la psychologie des prix',
-      image: '💰'
+      icon: Layers, 
+      title: 'Architecture Multi-Couches', 
+      desc: 'Stack technologique pour déploiement instantané',
+      color: 'cyber-secondary'
     },
     { 
-      icon: Megaphone, 
-      title: 'Assets Marketing Complets', 
-      desc: 'Pages de vente, emails, publicités et scripts vidéo prêts à utiliser',
-      image: '📢'
+      icon: Shield, 
+      title: 'Cybersécurité Intégrée', 
+      desc: 'Protection quantique contre la concurrence déloyale',
+      color: 'cyber-tertiary'
     }
   ];
 
   const pricingPlans = [
     {
-      name: "Starter",
+      name: "Neural Starter",
       price: "€29",
       period: "/mois",
       features: [
         "5 produits générés/mois",
-        "Analyse concurrence basique", 
-        "Templates PDF standards",
-        "Support email"
+        "Analyse neuronale basique", 
+        "Templates quantiques standards",
+        "Support holographique"
       ],
       popular: false
     },
     {
-      name: "Pro", 
+      name: "Cyber Pro", 
       price: "€79",
       period: "/mois",
       features: [
         "25 produits générés/mois",
-        "Analyse concurrence avancée",
-        "Templates PDF premium", 
+        "Analyse prédictive IA avancée",
+        "Templates premium quantum", 
         "Assets marketing complets",
-        "Support prioritaire",
-        "Accès communauté privée"
+        "Support prioritaire 24/7",
+        "Accès laboratoire cyber"
       ],
       popular: true
     },
     {
-      name: "Agency",
+      name: "Quantum Agency",
       price: "€199", 
       period: "/mois",
       features: [
-        "Produits illimités",
+        "Génération illimitée",
         "White-label complet",
-        "API access",
-        "Formation 1-on-1",
-        "Support dédié 24/7",
-        "Licence revente"
+        "API quantique access",
+        "Formation neuro-marketing",
+        "Support dédié omni-dimensionnel",
+        "Licence multiverse"
       ],
       popular: false
     }
   ];
 
-  const teamMembers = [
-    { name: "Thomas Leclerc", role: "CEO & Growth Hacker", experience: "15 ans", image: "TL" },
-    { name: "Julie Moreau", role: "Head of AI", experience: "12 ans", image: "JM" },
-    { name: "Marc Dubois", role: "Marketing Director", experience: "10 ans", image: "MD" },
-    { name: "Anaïs Bernard", role: "Product Manager", experience: "8 ans", image: "AB" }
-  ];
-
-  const faqs = [
-    {
-      q: "Comment l'IA génère-t-elle des produits rentables ?",
-      a: "Notre IA analyse des milliers de produits performants, identifie les patterns de succès et génère des concepts basés sur des données réelles de marché."
-    },
-    {
-      q: "Puis-je personnaliser les produits générés ?",
-      a: "Absolument ! Tous les éléments sont modifiables : contenu, design, prix, bonus. L'IA fournit la base, vous personnalisez selon votre vision."
-    },
-    {
-      q: "Y a-t-il une garantie de résultats ?",
-      a: "Nous offrons une garantie 30 jours satisfait ou remboursé. Si vous n'êtes pas satisfait, nous remboursons intégralement."
-    },
-    {
-      q: "L'outil fonctionne-t-il dans toutes les niches ?",
-      a: "Oui, notre IA est entraînée sur des données multi-niches : business, santé, développement personnel, tech, lifestyle, etc."
-    }
-  ];
-
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-gradient-cosmic relative overflow-hidden">
+      {/* Animated Background Particles */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-20 left-10 w-2 h-2 bg-cyber-primary rounded-full animate-float opacity-60"></div>
+        <div className="absolute top-40 right-20 w-1 h-1 bg-cyber-secondary rounded-full animate-float opacity-80" style={{animationDelay: '1s'}}></div>
+        <div className="absolute bottom-40 left-1/4 w-3 h-3 bg-cyber-tertiary rounded-full animate-float opacity-40" style={{animationDelay: '2s'}}></div>
+        <div className="absolute top-60 right-1/3 w-1.5 h-1.5 bg-cyber-primary rounded-full animate-float opacity-70" style={{animationDelay: '0.5s'}}></div>
+        <div className="absolute bottom-20 right-10 w-2 h-2 bg-cyber-secondary rounded-full animate-float opacity-50" style={{animationDelay: '1.5s'}}></div>
+      </div>
+
+      {/* Cyber Grid Lines */}
+      <div className="absolute inset-0 opacity-10 pointer-events-none">
+        <div className="absolute inset-0" style={{
+          backgroundImage: `
+            linear-gradient(hsl(var(--cyber-primary)) 1px, transparent 1px),
+            linear-gradient(90deg, hsl(var(--cyber-primary)) 1px, transparent 1px)
+          `,
+          backgroundSize: '50px 50px'
+        }}></div>
+      </div>
+
       {/* Navigation Header */}
-      <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-        <div className="container flex h-14 items-center">
+      <header className="sticky top-0 z-50 w-full border-b border-cyber-primary/20 bg-background/10 backdrop-blur-xl supports-[backdrop-filter]:bg-background/5">
+        <div className="container flex h-16 items-center">
           <div className="mr-4 flex">
-            <Link to="/" className="mr-6 flex items-center space-x-2">
-              <Wand2 className="h-6 w-6 text-primary" />
-              <span className="font-bold">NicheLaunchpad</span>
+            <Link to="/" className="mr-6 flex items-center space-x-2 group">
+              <div className="relative">
+                <Wand2 className="h-8 w-8 text-cyber-primary group-hover:animate-cyber-pulse transition-all duration-300" />
+                <div className="absolute inset-0 h-8 w-8 bg-cyber-primary/20 rounded-full blur-md group-hover:animate-pulse-glow"></div>
+              </div>
+              <span className="font-bold text-xl bg-gradient-primary bg-clip-text text-transparent">
+                NicheLaunchpad
+              </span>
             </Link>
           </div>
           <div className="flex flex-1 items-center justify-between space-x-2 md:justify-end">
@@ -169,11 +178,15 @@ const Landing = () => {
               {user ? (
                 <div className="flex items-center gap-4">
                   <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                    <div className="w-2 h-2 bg-cyber-primary rounded-full animate-pulse"></div>
                     <User className="w-4 h-4" />
                     {user.email}
                   </div>
-                  <Button variant="ghost" size="sm" asChild>
-                    <Link to="/app">Dashboard</Link>
+                  <Button variant="ghost" size="sm" asChild className="hover:bg-cyber-primary/10">
+                    <Link to="/app">
+                      <Globe className="w-4 h-4 mr-2" />
+                      Dashboard
+                    </Link>
                   </Button>
                   <Button 
                     variant="ghost" 
@@ -181,20 +194,24 @@ const Landing = () => {
                     onClick={async () => {
                       await signOut();
                     }}
+                    className="hover:bg-destructive/10"
                   >
                     <LogOut className="w-4 h-4 mr-1" />
                     Déconnexion
                   </Button>
                 </div>
               ) : (
-                <>
-                  <Button variant="ghost" size="sm" asChild>
+                <div className="flex gap-2">
+                  <Button variant="ghost" size="sm" asChild className="hover:bg-cyber-primary/10">
                     <Link to="/auth">Se connecter</Link>
                   </Button>
-                  <Button size="sm" asChild>
-                    <Link to="/auth">Commencer</Link>
+                  <Button size="sm" asChild className="bg-gradient-primary hover:shadow-cyber transition-all duration-300">
+                    <Link to="/auth">
+                      <Rocket className="w-4 h-4 mr-2" />
+                      Lancer
+                    </Link>
                   </Button>
-                </>
+                </div>
               )}
             </div>
           </div>
@@ -202,69 +219,89 @@ const Landing = () => {
       </header>
 
       {/* Hero Section */}
-      <section className="relative overflow-hidden bg-gradient-hero border-b border-border py-24">
-        <div className="absolute inset-0 bg-gradient-primary opacity-10" />
-        <div className="container relative">
-          <div className="mx-auto max-w-4xl text-center">
-            <Badge variant="secondary" className="mb-4">
-              <Sparkles className="w-4 h-4 mr-2" />
-              Générateur IA de Produits Viraux
-            </Badge>
+      <section className="relative py-32 overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-hero" />
+        <div className="container relative z-10">
+          <div className="mx-auto max-w-6xl text-center">
+            <div className="mb-8 animate-slide-up">
+              <Badge variant="secondary" className="mb-6 bg-gradient-glass border border-cyber-primary/30 text-cyber-primary backdrop-blur-sm shadow-glass">
+                <Atom className="w-4 h-4 mr-2 animate-neon-flicker" />
+                Générateur IA Quantique
+              </Badge>
+            </div>
             
-            <h1 className="text-5xl md:text-7xl font-bold bg-gradient-to-br from-foreground to-foreground/70 bg-clip-text text-transparent mb-6">
-              Créez des Produits Viraux
+            <h1 className="text-6xl md:text-8xl font-bold mb-8 animate-slide-up" style={{animationDelay: '0.2s'}}>
+              <span className="bg-gradient-primary bg-clip-text text-transparent">
+                L'Avenir
+              </span>
               <br />
-              <span className="text-primary">en 3 clics</span>
+              <span className="text-foreground">du Marketing</span>
+              <br />
+              <span className="text-cyber-primary animate-neon-flicker">
+                est Quantique
+              </span>
             </h1>
             
-            <p className="text-xl text-muted-foreground max-w-3xl mx-auto mb-8">
-              De l'analyse concurrence aux assets marketing : notre IA transforme un simple mot-clé en machine à cash automatisée. Plus de 10,000 entrepreneurs nous font confiance.
+            <p className="text-xl md:text-2xl text-muted-foreground max-w-4xl mx-auto mb-12 animate-slide-up" style={{animationDelay: '0.4s'}}>
+              Technologie de prochaine génération : IA neuronale, analyse quantique et orchestration virale pour créer l'empire digital de demain.
             </p>
             
-            <div className="flex gap-4 justify-center mb-12">
+            <div className="flex flex-col sm:flex-row gap-6 justify-center mb-16 animate-slide-up" style={{animationDelay: '0.6s'}}>
               <Button 
                 size="lg"
-                className="h-14 px-8 bg-gradient-primary hover:shadow-glow transition-all duration-300 text-lg"
+                className="h-16 px-12 bg-gradient-primary hover:shadow-cyber transition-all duration-500 text-lg group relative overflow-hidden"
                 asChild
               >
                 <Link to={user ? "/app" : "/auth"}>
-                  <Play className="w-5 h-5 mr-2" />
-                  {user ? "Dashboard" : "Commencer Maintenant"}
-                  <ArrowRight className="w-5 h-5 ml-2" />
+                  <div className="absolute inset-0 bg-cyber-primary/20 translate-x-[-100%] group-hover:translate-x-0 transition-transform duration-500"></div>
+                  <Brain className="w-6 h-6 mr-3 z-10 relative" />
+                  <span className="z-10 relative">{user ? "Accéder au Lab" : "Initialiser"}</span>
+                  <ArrowRight className="w-6 h-6 ml-3 z-10 relative group-hover:translate-x-1 transition-transform" />
                 </Link>
               </Button>
               
               <Button 
                 variant="outline" 
                 size="lg"
-                className="h-14 px-8 text-lg"
+                className="h-16 px-12 text-lg border-cyber-primary/30 hover:bg-cyber-primary/5 backdrop-blur-sm"
               >
-                Voir Démo
+                <Play className="w-6 h-6 mr-3" />
+                Neural Demo
               </Button>
             </div>
 
-            {/* Product Interface Mockup */}
-            <div className="relative mx-auto max-w-4xl">
-              <Card className="p-6 bg-card/80 backdrop-blur">
-                <div className="flex items-center gap-2 mb-4">
-                  <div className="flex gap-1">
-                    <div className="w-3 h-3 rounded-full bg-red-500"></div>
-                    <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
-                    <div className="w-3 h-3 rounded-full bg-green-500"></div>
-                  </div>
-                  <div className="flex-1 bg-muted rounded px-3 py-1 text-sm text-muted-foreground text-center">
-                    niche-launchpad.com/generator
-                  </div>
+            {/* Futuristic Interface Mockup */}
+            <div className="relative mx-auto max-w-6xl animate-slide-up" style={{animationDelay: '0.8s'}}>
+              <Card className="p-8 bg-gradient-glass backdrop-blur-xl border border-cyber-primary/20 shadow-glass relative overflow-hidden">
+                {/* Animated Border */}
+                <div className="absolute inset-0 rounded-lg overflow-hidden">
+                  <div className="absolute inset-0 bg-gradient-to-r from-cyber-primary/0 via-cyber-primary/20 to-cyber-primary/0 translate-x-[-100%] animate-[slide-right_3s_ease-in-out_infinite]"></div>
                 </div>
-                <div className="space-y-4">
+                
+                <div className="flex items-center gap-3 mb-6">
+                  <div className="flex gap-2">
+                    <div className="w-4 h-4 rounded-full bg-destructive animate-pulse"></div>
+                    <div className="w-4 h-4 rounded-full bg-yellow-500 animate-pulse" style={{animationDelay: '0.5s'}}></div>
+                    <div className="w-4 h-4 rounded-full bg-cyber-primary animate-pulse" style={{animationDelay: '1s'}}></div>
+                  </div>
+                  <div className="flex-1 bg-background/20 rounded-xl px-4 py-2 text-sm text-cyber-primary text-center border border-cyber-primary/20">
+                    quantum://niche-launchpad.nexus/neural-generator
+                  </div>
+                  <div className="text-cyber-primary text-sm">Status: <span className="text-green-400">ONLINE</span></div>
+                </div>
+                
+                <div className="space-y-6">
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                     {winningProducts.map((product, i) => (
-                      <Card key={i} className="p-3 bg-background/50">
-                        <div className="text-2xl mb-2">{product.image}</div>
-                        <h4 className="font-semibold text-xs mb-1">{product.title}</h4>
+                      <Card key={i} className="p-4 bg-gradient-glass border border-cyber-primary/10 hover:border-cyber-primary/30 transition-all duration-300 group">
+                        <div className="text-3xl mb-3 text-center group-hover:animate-float">{product.image}</div>
+                        <h4 className="font-semibold text-sm mb-2 text-center">{product.title}</h4>
                         <div className="flex justify-between text-xs">
-                          <span className="text-green-600 font-medium">{product.price}</span>
-                          <span className="text-muted-foreground">{product.sales}</span>
+                          <span className="text-cyber-primary font-bold">{product.price}</span>
+                          <span className="text-cyber-secondary">{product.sales}</span>
+                        </div>
+                        <div className="mt-2 h-1 bg-background/20 rounded-full overflow-hidden">
+                          <div className="h-full bg-gradient-primary animate-[width_2s_ease-in-out_infinite]" style={{width: `${60 + (i * 10)}%`}}></div>
                         </div>
                       </Card>
                     ))}
@@ -274,23 +311,37 @@ const Landing = () => {
             </div>
           </div>
         </div>
+
+        {/* Floating Tech Elements */}
+        <div className="absolute top-20 left-10 animate-float opacity-30">
+          <Cpu className="w-16 h-16 text-cyber-primary" />
+        </div>
+        <div className="absolute bottom-20 right-10 animate-float opacity-20" style={{animationDelay: '1s'}}>
+          <Atom className="w-20 h-20 text-cyber-secondary" />
+        </div>
+        <div className="absolute top-1/2 left-5 animate-float opacity-25" style={{animationDelay: '2s'}}>
+          <Orbit className="w-12 h-12 text-cyber-tertiary" />
+        </div>
       </section>
 
-      {/* Social Proof Avatars */}
-      <section className="py-8 border-b">
+      {/* Social Proof with Cyber Style */}
+      <section className="py-12 border-y border-cyber-primary/20 bg-gradient-glass backdrop-blur-xl">
         <div className="container">
-          <div className="flex flex-wrap items-center justify-center gap-4">
-            <span className="text-sm text-muted-foreground mr-4">Ils nous font confiance :</span>
+          <div className="flex flex-wrap items-center justify-center gap-6">
+            <span className="text-sm text-cyber-primary mr-4 flex items-center">
+              <Shield className="w-4 h-4 mr-2" />
+              Réseau Neural Certifié :
+            </span>
             {testimonials.map((testimonial, i) => (
-              <div key={i} className="flex items-center gap-2">
-                <Avatar className="h-10 w-10">
-                  <AvatarFallback className="bg-primary/10 text-primary font-semibold">
+              <div key={i} className="flex items-center gap-3 p-2 rounded-xl bg-gradient-glass border border-cyber-primary/10 hover:border-cyber-primary/30 transition-all duration-300">
+                <Avatar className="h-12 w-12 border-2 border-cyber-primary/20">
+                  <AvatarFallback className="bg-gradient-primary text-background font-bold">
                     {testimonial.avatar}
                   </AvatarFallback>
                 </Avatar>
                 <div className="text-xs">
-                  <div className="font-medium">{testimonial.name}</div>
-                  <div className="text-green-600">{testimonial.revenue}</div>
+                  <div className="font-semibold">{testimonial.name}</div>
+                  <div className="text-cyber-primary font-bold">{testimonial.revenue}</div>
                 </div>
               </div>
             ))}
@@ -298,54 +349,17 @@ const Landing = () => {
         </div>
       </section>
 
-      {/* Product Showcase */}
-      <section className="py-20">
+      {/* Features with Immersive Cards */}
+      <section className="py-32 relative">
         <div className="container">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">
-              Vos recherches de Produits Gagnants commencent ici
+          <div className="text-center mb-20">
+            <h2 className="text-4xl md:text-6xl font-bold mb-6">
+              <span className="text-foreground">Architecture</span>
+              <br />
+              <span className="bg-gradient-primary bg-clip-text text-transparent">Neuro-Quantique</span>
             </h2>
-            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-              Découvrez les produits qui génèrent le plus de revenus dans votre niche
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
-            {winningProducts.map((product, i) => (
-              <Card key={i} className="p-6 hover:shadow-lg transition-all duration-300">
-                <div className="text-4xl mb-4 text-center">{product.image}</div>
-                <h3 className="font-semibold mb-2">{product.title}</h3>
-                <div className="flex justify-between items-center">
-                  <span className="text-2xl font-bold text-green-600">{product.price}</span>
-                  <Badge variant="secondary">{product.sales}</Badge>
-                </div>
-                <div className="mt-4 flex gap-1">
-                  {[...Array(5)].map((_, j) => (
-                    <Star key={j} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
-                  ))}
-                </div>
-              </Card>
-            ))}
-          </div>
-
-          <div className="text-center">
-            <Button size="lg" variant="outline">
-              Voir plus de produits gagnants
-              <ArrowRight className="w-4 h-4 ml-2" />
-            </Button>
-          </div>
-        </div>
-      </section>
-
-      {/* Main Features */}
-      <section className="py-20 bg-muted/30">
-        <div className="container">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">
-              Obtenez instantanément toutes les données sur les produits. C'est magique !
-            </h2>
-            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-              Notre IA analyse, génère et optimise chaque aspect de votre produit en temps réel
+            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+              Technologies de rupture pour l'économie numérique de demain
             </p>
           </div>
 
@@ -353,13 +367,24 @@ const Landing = () => {
             {features.map((feature, i) => {
               const Icon = feature.icon;
               return (
-                <Card key={i} className="p-8 bg-background hover:shadow-xl transition-all duration-300">
-                  <div className="text-6xl mb-6 text-center">{feature.image}</div>
-                  <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center mb-4 mx-auto">
-                    <Icon className="w-6 h-6 text-primary" />
+                <Card key={i} className="group p-8 bg-gradient-glass border border-cyber-primary/20 hover:border-cyber-primary/40 transition-all duration-500 hover:shadow-cyber relative overflow-hidden">
+                  {/* Animated background */}
+                  <div className="absolute inset-0 bg-gradient-to-br from-cyber-primary/0 via-cyber-primary/5 to-cyber-primary/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                  
+                  <div className="relative z-10">
+                    <div className="w-16 h-16 rounded-2xl bg-gradient-primary flex items-center justify-center mb-6 mx-auto group-hover:animate-pulse-glow">
+                      <Icon className="w-8 h-8 text-background" />
+                    </div>
+                    <h3 className="text-xl font-bold mb-4 text-center group-hover:text-cyber-primary transition-colors duration-300">
+                      {feature.title}
+                    </h3>
+                    <p className="text-muted-foreground text-center leading-relaxed">
+                      {feature.desc}
+                    </p>
+                    
+                    {/* Cyber accent line */}
+                    <div className="mt-6 h-0.5 bg-gradient-to-r from-transparent via-cyber-primary to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                   </div>
-                  <h3 className="text-xl font-semibold mb-3 text-center">{feature.title}</h3>
-                  <p className="text-muted-foreground text-center">{feature.desc}</p>
                 </Card>
               );
             })}
@@ -367,129 +392,67 @@ const Landing = () => {
         </div>
       </section>
 
-      {/* Process Section */}
-      <section className="py-20">
+      {/* Pricing with Quantum Style */}
+      <section className="py-32 bg-gradient-glass relative">
         <div className="container">
-          <div className="grid md:grid-cols-2 gap-12 items-center">
-            <div>
-              <h2 className="text-3xl md:text-4xl font-bold mb-6">
-                Le moyen le plus rapide de repérer les tendances virales et de passer à l'action
-              </h2>
-              <p className="text-xl text-muted-foreground mb-8">
-                Notre technologie IA scanne en continu des milliers de sources pour identifier les opportunités avant vos concurrents.
-              </p>
-              <div className="space-y-4">
-                <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 rounded-full bg-primary text-primary-foreground flex items-center justify-center font-bold">1</div>
-                  <span>Entrez votre niche ou mot-clé</span>
-                </div>
-                <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 rounded-full bg-primary text-primary-foreground flex items-center justify-center font-bold">2</div>
-                  <span>L'IA analyse la concurrence automatiquement</span>
-                </div>
-                <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 rounded-full bg-primary text-primary-foreground flex items-center justify-center font-bold">3</div>
-                  <span>Recevez votre produit complet en minutes</span>
-                </div>
-              </div>
-            </div>
-            <div>
-              <Card className="p-6 bg-gradient-card">
-                <div className="aspect-video bg-muted rounded-lg flex items-center justify-center mb-4">
-                  <Play className="w-16 h-16 text-primary" />
-                </div>
-                <h3 className="font-semibold mb-2">Démonstration en direct</h3>
-                <p className="text-sm text-muted-foreground">
-                  Regardez comment créer un produit viral en moins de 5 minutes
-                </p>
-              </Card>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Simplify Operations */}
-      <section className="py-20 bg-muted/30">
-        <div className="container">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">
-              Simplifiez vos opérations et boostez vos profits avec l'IA
-            </h2>
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-8">
-            <Card className="p-6">
-              <BarChart3 className="w-12 h-12 text-primary mb-4" />
-              <h3 className="text-xl font-semibold mb-3">Analyse Prédictive</h3>
-              <p className="text-muted-foreground">
-                Prédisez le potentiel viral de vos produits avant le lancement
-              </p>
-            </Card>
-            
-            <Card className="p-6">
-              <Zap className="w-12 h-12 text-primary mb-4" />
-              <h3 className="text-xl font-semibold mb-3">Génération Ultra-Rapide</h3>
-              <p className="text-muted-foreground">
-                De l'idée au produit fini : moins de 10 minutes chrono
-              </p>
-            </Card>
-            
-            <Card className="p-6">
-              <Target className="w-12 h-12 text-primary mb-4" />
-              <h3 className="text-xl font-semibold mb-3">Ciblage Précis</h3>
-              <p className="text-muted-foreground">
-                Identifiez votre audience idéale avec une précision chirurgicale
-              </p>
-            </Card>
-          </div>
-        </div>
-      </section>
-
-      {/* Pricing Section */}
-      <section className="py-20">
-        <div className="container">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">
-              L'abonnement que vous n'aurez jamais besoin de résilier
+          <div className="text-center mb-20">
+            <h2 className="text-4xl md:text-6xl font-bold mb-6">
+              <span className="text-foreground">Plans</span>
+              <br />
+              <span className="bg-gradient-primary bg-clip-text text-transparent">Quantiques</span>
             </h2>
             <p className="text-xl text-muted-foreground">
-              Choisissez le plan qui correspond à vos ambitions
+              Accès aux dimensions parallèles du marketing
             </p>
           </div>
 
           <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
             {pricingPlans.map((plan, i) => (
-              <Card key={i} className={`p-8 relative ${plan.popular ? 'ring-2 ring-primary shadow-xl scale-105' : ''}`}>
+              <Card key={i} className={`relative p-8 transition-all duration-500 overflow-hidden ${
+                plan.popular 
+                  ? 'bg-gradient-primary border-cyber-primary shadow-cyber scale-105' 
+                  : 'bg-gradient-glass border-cyber-primary/20 hover:border-cyber-primary/40'
+              }`}>
                 {plan.popular && (
-                  <Badge className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-primary">
-                    Le plus populaire
-                  </Badge>
+                  <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-cyber-primary via-cyber-secondary to-cyber-tertiary"></div>
                 )}
-                <div className="text-center mb-6">
-                  <h3 className="text-2xl font-bold mb-2">{plan.name}</h3>
-                  <div className="flex items-baseline justify-center">
-                    <span className="text-4xl font-bold">{plan.price}</span>
-                    <span className="text-muted-foreground ml-1">{plan.period}</span>
+                
+                <div className="text-center mb-8">
+                  <h3 className={`text-2xl font-bold mb-2 ${plan.popular ? 'text-background' : 'text-foreground'}`}>
+                    {plan.name}
+                  </h3>
+                  <div className="flex items-baseline justify-center gap-1">
+                    <span className={`text-5xl font-bold ${plan.popular ? 'text-background' : 'text-cyber-primary'}`}>
+                      {plan.price}
+                    </span>
+                    <span className={`text-lg ${plan.popular ? 'text-background/70' : 'text-muted-foreground'}`}>
+                      {plan.period}
+                    </span>
                   </div>
                 </div>
-                
-                <div className="space-y-3 mb-8">
+
+                <ul className="space-y-4 mb-8">
                   {plan.features.map((feature, j) => (
-                    <div key={j} className="flex items-center gap-3">
-                      <Check className="w-5 h-5 text-green-500 flex-shrink-0" />
-                      <span className="text-sm">{feature}</span>
-                    </div>
+                    <li key={j} className="flex items-start gap-3">
+                      <Check className={`w-5 h-5 mt-0.5 ${plan.popular ? 'text-background' : 'text-cyber-primary'}`} />
+                      <span className={`text-sm ${plan.popular ? 'text-background/90' : 'text-muted-foreground'}`}>
+                        {feature}
+                      </span>
+                    </li>
                   ))}
-                </div>
-                
+                </ul>
+
                 <Button 
-                  className={`w-full ${plan.popular ? 'bg-primary' : ''}`}
-                  variant={plan.popular ? "default" : "outline"}
-                  size="lg"
+                  className={`w-full h-12 ${
+                    plan.popular 
+                      ? 'bg-background text-primary hover:bg-background/90' 
+                      : 'bg-gradient-primary hover:shadow-cyber'
+                  } transition-all duration-300`}
                   asChild
                 >
                   <Link to="/auth">
-                    Commencer maintenant
+                    <Rocket className="w-4 h-4 mr-2" />
+                    Activer {plan.name}
                   </Link>
                 </Button>
               </Card>
@@ -498,142 +461,47 @@ const Landing = () => {
         </div>
       </section>
 
-      {/* Team Section */}
-      <section className="py-20 bg-muted/30">
-        <div className="container">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">
-              Les Experts E-Commerce nous font confiance
-            </h2>
-            <p className="text-xl text-muted-foreground">
-              Une équipe de passionnés qui révolutionne la création de produits digitaux
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {teamMembers.map((member, i) => (
-              <Card key={i} className="p-6 text-center hover:shadow-lg transition-all">
-                <Avatar className="w-20 h-20 mx-auto mb-4">
-                  <AvatarFallback className="bg-primary/10 text-primary text-lg">
-                    {member.image}
-                  </AvatarFallback>
-                </Avatar>
-                <h3 className="font-semibold mb-1">{member.name}</h3>
-                <p className="text-sm text-primary mb-1">{member.role}</p>
-                <p className="text-xs text-muted-foreground">{member.experience} d'expérience</p>
-              </Card>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* FAQ Section */}
-      <section className="py-20">
-        <div className="container">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">
-              Questions fréquemment posées
-            </h2>
-          </div>
-
-          <div className="max-w-3xl mx-auto space-y-4">
-            {faqs.map((faq, i) => (
-              <Card key={i} className="p-6">
-                <div className="flex items-start gap-4">
-                  <Plus className="w-5 h-5 text-primary mt-1 flex-shrink-0" />
-                  <div>
-                    <h3 className="font-semibold mb-2">{faq.q}</h3>
-                    <p className="text-muted-foreground text-sm">{faq.a}</p>
-                  </div>
-                </div>
-              </Card>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Final CTA */}
-      <section className="py-20 bg-gradient-hero">
-        <div className="container text-center">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4 text-white">
-            La solution préférée de 10,000+ entrepreneurs
+      {/* Final CTA with Immersive Effect */}
+      <section className="py-32 relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-cosmic opacity-80"></div>
+        <div className="container relative z-10 text-center">
+          <h2 className="text-5xl md:text-7xl font-bold mb-8">
+            <span className="text-foreground">Rejoignez la</span>
+            <br />
+            <span className="bg-gradient-primary bg-clip-text text-transparent animate-neon-flicker">
+              Révolution Quantique
+            </span>
           </h2>
-          <p className="text-xl text-white/80 mb-8 max-w-2xl mx-auto">
-            Rejoignez la communauté qui révolutionne la création de produits digitaux
+          
+          <p className="text-xl text-muted-foreground max-w-3xl mx-auto mb-12">
+            L'avenir appartient à ceux qui maîtrisent l'IA. Commencez votre ascension dès maintenant.
           </p>
           
-          <Button 
-            size="lg"
-            className="h-14 px-12 bg-white text-primary hover:bg-white/90 transition-all duration-300 text-lg"
-            asChild
-          >
+          <Button size="lg" className="h-20 px-16 bg-gradient-primary hover:shadow-cyber text-xl transition-all duration-500 group" asChild>
             <Link to="/auth">
-              <Sparkles className="w-5 h-5 mr-2" />
-              Créer Mon Compte Gratuit
+              <Brain className="w-8 h-8 mr-4 group-hover:animate-cyber-pulse" />
+              Initialiser la Séquence
+              <ArrowRight className="w-8 h-8 ml-4 group-hover:translate-x-2 transition-transform" />
             </Link>
           </Button>
-          
-          <p className="text-sm text-white/60 mt-4">
-            Aucune carte de crédit requise • Essai gratuit 14 jours
-          </p>
         </div>
       </section>
 
       {/* Footer */}
-      <footer className="bg-background border-t">
-        <div className="container py-16">
-          <div className="grid md:grid-cols-4 gap-8">
-            <div>
-              <div className="flex items-center space-x-2 mb-4">
-                <Wand2 className="h-6 w-6 text-primary" />
-                <span className="font-bold">NicheLaunchpad</span>
-              </div>
-              <p className="text-sm text-muted-foreground">
-                La plateforme IA qui transforme vos idées en produits viraux rentables.
-              </p>
+      <footer className="py-16 border-t border-cyber-primary/20 bg-gradient-glass backdrop-blur-xl">
+        <div className="container">
+          <div className="flex flex-col items-center gap-6">
+            <div className="flex items-center space-x-3">
+              <Wand2 className="h-8 w-8 text-cyber-primary animate-neon-flicker" />
+              <span className="font-bold text-2xl bg-gradient-primary bg-clip-text text-transparent">
+                NicheLaunchpad
+              </span>
             </div>
-            
-            <div>
-              <h3 className="font-semibold mb-4">Produit</h3>
-              <div className="space-y-2 text-sm text-muted-foreground">
-                <div>Fonctionnalités</div>
-                <div>Tarifs</div>
-                <div>API</div>
-                <div>Documentation</div>
-              </div>
-            </div>
-            
-            <div>
-              <h3 className="font-semibold mb-4">Entreprise</h3>
-              <div className="space-y-2 text-sm text-muted-foreground">
-                <div>À propos</div>
-                <div>Blog</div>
-                <div>Carrières</div>
-                <div>Contact</div>
-              </div>
-            </div>
-            
-            <div>
-              <h3 className="font-semibold mb-4">Support</h3>
-              <div className="space-y-2 text-sm text-muted-foreground">
-                <div>Centre d'aide</div>
-                <div>Communauté</div>
-                <div>Statut</div>
-                <div>Confidentialité</div>
-              </div>
-            </div>
-          </div>
-          
-          <Separator className="my-8" />
-          
-          <div className="flex flex-col md:flex-row items-center justify-between">
-            <p className="text-sm text-muted-foreground">
-              © 2024 NicheLaunchpad. Tous droits réservés.
+            <p className="text-sm text-muted-foreground text-center max-w-2xl">
+              Plateforme de génération IA nouvelle génération. Propulsé par l'intelligence artificielle quantique et l'analyse prédictive avancée.
             </p>
-            <div className="flex gap-4 mt-4 md:mt-0">
-              <Button variant="ghost" size="sm">Mentions légales</Button>
-              <Button variant="ghost" size="sm">CGU</Button>
-              <Button variant="ghost" size="sm">Politique de confidentialité</Button>
+            <div className="text-xs text-muted-foreground">
+              © 2024 NicheLaunchpad. Tous droits réservés dans toutes les dimensions.
             </div>
           </div>
         </div>
