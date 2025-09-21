@@ -3,355 +3,378 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Separator } from '@/components/ui/separator';
 import { useAuth } from '@/contexts/AuthContext';
+import InteractiveDemo from '@/components/InteractiveDemo';
+import InteractiveTimeline from '@/components/InteractiveTimeline';
+import InteractiveComparison from '@/components/InteractiveComparison';
+import AnimatedTestimonials from '@/components/AnimatedTestimonials';
 import { 
-  Search, 
+  Sparkles, 
+  Wand2, 
   TrendingUp, 
-  Eye, 
-  Heart, 
-  Share2, 
-  Filter, 
+  FileText, 
+  Gift, 
+  DollarSign, 
+  Megaphone, 
+  ArrowRight, 
+  Star, 
+  Users, 
+  Target, 
+  Zap, 
+  BarChart3, 
+  ShoppingCart, 
+  Check, 
   Play,
-  Star,
-  Users,
-  Target,
-  Zap,
-  ChevronRight,
+  ChevronDown,
+  Plus,
   LogOut,
   User,
-  ShoppingCart,
-  BarChart3,
-  Globe,
-  Menu
+  Cpu,
+  Atom,
+  Layers,
+  Brain,
+  Orbit,
+  Lightbulb,
+  Rocket,
+  Shield,
+  Globe
 } from 'lucide-react';
 
 const Landing = () => {
   const { user, signOut } = useAuth();
 
-  const stats = [
-    { label: 'Ads Tracked', value: '2.5M+' },
-    { label: 'Products Found', value: '850K+' },
-    { label: 'Success Rate', value: '94%' },
-    { label: 'Users', value: '200K+' }
+  const testimonials = [
+    { name: "Marie Dubois", avatar: "MD", role: "E-commerce Entrepreneur", revenue: "€50K/mois" },
+    { name: "Pierre Martin", avatar: "PM", role: "Dropshipper", revenue: "€25K/mois" },
+    { name: "Sophie Chen", avatar: "SC", role: "Digital Marketer", revenue: "€75K/mois" },
+    { name: "Alex Rousseau", avatar: "AR", role: "Info-preneur", revenue: "€100K/mois" },
+    { name: "Camille Lopez", avatar: "CL", role: "Coach Business", revenue: "€35K/mois" }
+  ];
+
+  const winningProducts = [
+    { title: "Guide Mindset Millionnaire", price: "€97", sales: "2.5K ventes", image: "🧠" },
+    { title: "Formation E-commerce", price: "€297", sales: "1.8K ventes", image: "🚀" },
+    { title: "Pack Trading Crypto", price: "€197", sales: "3.2K ventes", image: "⚡" },
+    { title: "Méthode Immobilier", price: "€497", sales: "950 ventes", image: "🌟" }
   ];
 
   const features = [
-    {
-      icon: Search,
-      title: 'Advanced Ad Spy',
-      description: 'Track millions of ads across all major platforms with real-time data and analytics.'
+    { 
+      icon: Brain, 
+      title: 'IA Neuro-Analytique', 
+      desc: 'Analyse quantique des tendances avec réseaux de neurones avancés',
+      color: 'cyber-primary'
     },
-    {
-      icon: TrendingUp,
-      title: 'Winning Products',
-      description: 'Discover trending products before they saturate the market with our AI algorithms.'
+    { 
+      icon: Atom, 
+      title: 'Génération Atomique', 
+      desc: 'Création moléculaire de contenu viral par assemblage quantique',
+      color: 'cyber-secondary'
     },
-    {
-      icon: Target,
-      title: 'Competitor Analysis',
-      description: 'Analyze your competitors strategies and find gaps in the market.'
+    { 
+      icon: Orbit, 
+      title: 'Orchestrateur Viral', 
+      desc: 'Système orbital de propagation automatique multi-plateforme',
+      color: 'cyber-tertiary'
     },
-    {
-      icon: BarChart3,
-      title: 'Sales Tracking',
-      description: 'Monitor product performance and sales data across multiple stores.'
-    }
-  ];
-
-  const testimonials = [
-    {
-      name: 'Sarah Chen',
-      role: 'E-commerce Entrepreneur',
-      avatar: 'SC',
-      comment: 'Found 5 winning products in my first week. Revenue increased by 340%!',
-      revenue: '$50K/month'
+    { 
+      icon: Cpu, 
+      title: 'Processeur Marketing', 
+      desc: 'Unité de traitement parallèle pour campagnes omni-canal',
+      color: 'cyber-primary'
     },
-    {
-      name: 'Mike Rodriguez',
-      role: 'Dropshipper',
-      avatar: 'MR',
-      comment: 'The ad spy feature is incredible. I can see exactly what my competitors are doing.',
-      revenue: '$85K/month'
+    { 
+      icon: Layers, 
+      title: 'Architecture Multi-Couches', 
+      desc: 'Stack technologique pour déploiement instantané',
+      color: 'cyber-secondary'
     },
-    {
-      name: 'Emma Johnson',
-      role: 'Digital Marketer',
-      avatar: 'EJ',
-      comment: 'Best investment for my business. ROI paid for itself in 2 weeks.',
-      revenue: '$120K/month'
+    { 
+      icon: Shield, 
+      title: 'Cybersécurité Intégrée', 
+      desc: 'Protection quantique contre la concurrence déloyale',
+      color: 'cyber-tertiary'
     }
   ];
 
   const pricingPlans = [
     {
-      name: 'Starter',
-      price: '$39',
-      period: '/month',
+      name: "Neural Starter",
+      price: "€29",
+      period: "/mois",
       features: [
-        '10,000 ad searches/month',
-        'Basic product research',
-        'Standard filters',
-        'Email support'
+        "5 produits générés/mois",
+        "Analyse neuronale basique", 
+        "Templates quantiques standards",
+        "Support holographique"
       ],
       popular: false
     },
     {
-      name: 'Professional',
-      price: '$79',
-      period: '/month',
+      name: "Cyber Pro", 
+      price: "€79",
+      period: "/mois",
       features: [
-        'Unlimited ad searches',
-        'Advanced product research',
-        'All filters & sorting',
-        'Sales tracking',
-        'Priority support',
-        'Export data'
+        "25 produits générés/mois",
+        "Analyse prédictive IA avancée",
+        "Templates premium quantum", 
+        "Assets marketing complets",
+        "Support prioritaire 24/7",
+        "Accès laboratoire cyber"
       ],
       popular: true
     },
     {
-      name: 'Agency',
-      price: '$149',
-      period: '/month',
+      name: "Quantum Agency",
+      price: "€199", 
+      period: "/mois",
       features: [
-        'Everything in Professional',
-        'White-label access',
-        'API access',
-        'Custom integrations',
-        'Dedicated account manager',
-        'Custom reports'
+        "Génération illimitée",
+        "White-label complet",
+        "API quantique access",
+        "Formation neuro-marketing",
+        "Support dédié omni-dimensionnel",
+        "Licence multiverse"
       ],
       popular: false
     }
   ];
 
   return (
-    <div className="min-h-screen bg-background">
-      {/* Header */}
-      <header className="sticky top-0 z-50 w-full border-b bg-background/80 backdrop-blur-xl">
-        <div className="container flex h-16 items-center justify-between">
-          <div className="flex items-center gap-8">
-            <Link to="/" className="flex items-center gap-2">
-              <div className="w-10 h-10 rounded-full bg-gradient-primary flex items-center justify-center">
-                <span className="text-white font-bold text-lg">M</span>
-              </div>
-              <span className="text-2xl font-bold">Minea</span>
-            </Link>
-            
-            <nav className="hidden md:flex items-center gap-6">
-              <Link to="#" className="text-sm font-medium hover:text-primary transition-colors">
-                Adspy
-              </Link>
-              <Link to="#" className="text-sm font-medium hover:text-primary transition-colors">
-                Winning Products
-              </Link>
-              <Link to="#" className="text-sm font-medium hover:text-primary transition-colors">
-                FAQ
-              </Link>
-            </nav>
-          </div>
+    <div className="min-h-screen bg-gradient-cosmic relative overflow-hidden">
+      {/* Animated Background Particles */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-20 left-10 w-2 h-2 bg-cyber-primary rounded-full animate-float opacity-60"></div>
+        <div className="absolute top-40 right-20 w-1 h-1 bg-cyber-secondary rounded-full animate-float opacity-80" style={{animationDelay: '1s'}}></div>
+        <div className="absolute bottom-40 left-1/4 w-3 h-3 bg-cyber-tertiary rounded-full animate-float opacity-40" style={{animationDelay: '2s'}}></div>
+        <div className="absolute top-60 right-1/3 w-1.5 h-1.5 bg-cyber-primary rounded-full animate-float opacity-70" style={{animationDelay: '0.5s'}}></div>
+        <div className="absolute bottom-20 right-10 w-2 h-2 bg-cyber-secondary rounded-full animate-float opacity-50" style={{animationDelay: '1.5s'}}></div>
+      </div>
 
-          <div className="flex items-center gap-4">
-            {user ? (
-              <div className="flex items-center gap-4">
-                <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                  <User className="w-4 h-4" />
-                  {user.email}
+      {/* Cyber Grid Lines */}
+      <div className="absolute inset-0 opacity-10 pointer-events-none">
+        <div className="absolute inset-0" style={{
+          backgroundImage: `
+            linear-gradient(hsl(var(--cyber-primary)) 1px, transparent 1px),
+            linear-gradient(90deg, hsl(var(--cyber-primary)) 1px, transparent 1px)
+          `,
+          backgroundSize: '50px 50px'
+        }}></div>
+      </div>
+
+      {/* Navigation Header */}
+      <header className="sticky top-0 z-50 w-full border-b border-cyber-primary/20 bg-background/10 backdrop-blur-xl supports-[backdrop-filter]:bg-background/5">
+        <div className="container flex h-16 items-center">
+          <div className="mr-4 flex">
+            <Link to="/" className="mr-6 flex items-center space-x-2 group">
+              <div className="relative">
+                <Wand2 className="h-8 w-8 text-cyber-primary group-hover:animate-cyber-pulse transition-all duration-300" />
+                <div className="absolute inset-0 h-8 w-8 bg-cyber-primary/20 rounded-full blur-md group-hover:animate-pulse-glow"></div>
+              </div>
+              <span className="font-bold text-xl bg-gradient-primary bg-clip-text text-transparent">
+                NicheLaunchpad
+              </span>
+            </Link>
+          </div>
+          <div className="flex flex-1 items-center justify-between space-x-2 md:justify-end">
+            <div className="w-full flex-1 md:w-auto md:flex-none">
+              {user ? (
+                <div className="flex items-center gap-4">
+                  <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                    <div className="w-2 h-2 bg-cyber-primary rounded-full animate-pulse"></div>
+                    <User className="w-4 h-4" />
+                    {user.email}
+                  </div>
+                  <Button variant="ghost" size="sm" asChild className="hover:bg-cyber-primary/10">
+                    <Link to="/app">
+                      <Globe className="w-4 h-4 mr-2" />
+                      Dashboard
+                    </Link>
+                  </Button>
+                  <Button 
+                    variant="ghost" 
+                    size="sm" 
+                    onClick={async () => {
+                      await signOut();
+                    }}
+                    className="hover:bg-destructive/10"
+                  >
+                    <LogOut className="w-4 h-4 mr-1" />
+                    Déconnexion
+                  </Button>
                 </div>
-                <Button variant="ghost" size="sm" asChild>
-                  <Link to="/app">
-                    <Globe className="w-4 h-4 mr-2" />
-                    Dashboard
-                  </Link>
-                </Button>
-                <Button 
-                  variant="ghost" 
-                  size="sm" 
-                  onClick={async () => {
-                    await signOut();
-                  }}
-                >
-                  <LogOut className="w-4 h-4 mr-1" />
-                  Sign Out
-                </Button>
-              </div>
-            ) : (
-              <div className="flex items-center gap-2">
-                <Button variant="ghost" size="sm" asChild>
-                  <Link to="/auth">Login</Link>
-                </Button>
-                <Button size="sm" className="bg-gradient-primary hover:shadow-button" asChild>
-                  <Link to="/auth">Free Trial</Link>
-                </Button>
-              </div>
-            )}
-            <Button variant="ghost" size="sm" className="md:hidden">
-              <Menu className="w-4 h-4" />
-            </Button>
+              ) : (
+                <div className="flex gap-2">
+                  <Button variant="ghost" size="sm" asChild className="hover:bg-cyber-primary/10">
+                    <Link to="/auth">Se connecter</Link>
+                  </Button>
+                  <Button size="sm" asChild className="bg-gradient-primary hover:shadow-cyber transition-all duration-300">
+                    <Link to="/auth">
+                      <Rocket className="w-4 h-4 mr-2" />
+                      Lancer
+                    </Link>
+                  </Button>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </header>
 
       {/* Hero Section */}
-      <section className="relative py-32 bg-gradient-hero overflow-hidden">
+      <section className="relative py-32 overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-hero" />
         <div className="container relative z-10">
-          <div className="max-w-4xl mx-auto text-center">
-            <Badge className="mb-6 bg-white/20 text-minea-dark border-0">
-              <Star className="w-4 h-4 mr-2 fill-current" />
-              #1 All-In-One AI DropShipping Tool
-            </Badge>
+          <div className="mx-auto max-w-6xl text-center">
+            <div className="mb-8 animate-slide-up">
+              <Badge variant="secondary" className="mb-6 bg-gradient-glass border border-cyber-primary/30 text-cyber-primary backdrop-blur-sm shadow-glass">
+                <Atom className="w-4 h-4 mr-2 animate-neon-flicker" />
+                Générateur IA Quantique
+              </Badge>
+            </div>
             
-            <h1 className="text-5xl md:text-7xl font-bold mb-8 text-minea-dark">
-              Launch <span className="text-primary">Winning</span>
+            <h1 className="text-6xl md:text-8xl font-bold mb-8 animate-slide-up" style={{animationDelay: '0.2s'}}>
+              <span className="bg-gradient-primary bg-clip-text text-transparent">
+                L'Avenir
+              </span>
               <br />
-              Products in <span className="text-primary">3 clicks</span>
+              <span className="text-foreground">du Marketing</span>
+              <br />
+              <span className="text-cyber-primary animate-neon-flicker">
+                est Quantique
+              </span>
             </h1>
             
-            <p className="text-xl md:text-2xl text-minea-dark/70 max-w-3xl mx-auto mb-12">
-              Minea is an all-in-one solution, designed to help you launch your ecommerce, scale your sales & boost profits
+            <p className="text-xl md:text-2xl text-muted-foreground max-w-4xl mx-auto mb-12 animate-slide-up" style={{animationDelay: '0.4s'}}>
+              Technologie de prochaine génération : IA neuronale, analyse quantique et orchestration virale pour créer l'empire digital de demain.
             </p>
             
-            <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16">
+            <div className="flex flex-col sm:flex-row gap-6 justify-center mb-16 animate-slide-up" style={{animationDelay: '0.6s'}}>
               <Button 
                 size="lg"
-                className="h-14 px-8 bg-minea-dark text-white hover:bg-minea-dark/90 text-lg"
+                className="h-16 px-12 bg-gradient-primary hover:shadow-cyber transition-all duration-500 text-lg group relative overflow-hidden"
                 asChild
               >
                 <Link to={user ? "/app" : "/auth"}>
-                  Start Now for Free
+                  <div className="absolute inset-0 bg-cyber-primary/20 translate-x-[-100%] group-hover:translate-x-0 transition-transform duration-500"></div>
+                  <Brain className="w-6 h-6 mr-3 z-10 relative" />
+                  <span className="z-10 relative">{user ? "Accéder au Lab" : "Initialiser"}</span>
+                  <ArrowRight className="w-6 h-6 ml-3 z-10 relative group-hover:translate-x-1 transition-transform" />
                 </Link>
               </Button>
               
               <Button 
                 variant="outline" 
                 size="lg"
-                className="h-14 px-8 text-lg border-minea-dark/20 hover:bg-minea-dark/5"
+                className="h-16 px-12 text-lg border-cyber-primary/30 hover:bg-cyber-primary/5 backdrop-blur-sm"
               >
-                <Play className="w-5 h-5 mr-2" />
-                Watch Demo
+                <Play className="w-6 h-6 mr-3" />
+                Neural Demo
               </Button>
             </div>
 
-            <p className="text-sm text-minea-dark/60 mb-8">No commitment.</p>
-
-            {/* Feature badges */}
-            <div className="flex flex-wrap justify-center gap-4">
-              <Badge variant="secondary" className="px-4 py-2">
-                <Search className="w-4 h-4 mr-2" />
-                Browse Ads
-              </Badge>
-              <Badge variant="secondary" className="px-4 py-2">
-                <ShoppingCart className="w-4 h-4 mr-2" />
-                Browse Products
-              </Badge>
-              <Badge variant="secondary" className="px-4 py-2">
-                <BarChart3 className="w-4 h-4 mr-2" />
-                Sales Tracker
-              </Badge>
+            {/* Interactive Demo */}
+            <div className="animate-slide-up" style={{animationDelay: '0.8s'}}>
+              <InteractiveDemo />
             </div>
           </div>
         </div>
 
-        {/* Demo mockup */}
-        <div className="container mt-20">
-          <div className="max-w-6xl mx-auto">
-            <Card className="p-2 bg-white shadow-card">
-              <div className="bg-gradient-card rounded-lg overflow-hidden">
-                {/* Mock interface header */}
-                <div className="bg-white border-b p-4 flex items-center gap-4">
-                  <div className="flex items-center gap-2">
-                    <div className="w-8 h-8 rounded-full bg-gradient-primary flex items-center justify-center">
-                      <span className="text-white font-bold text-sm">M</span>
-                    </div>
-                    <span className="font-semibold">Minea</span>
-                  </div>
-                  <div className="flex-1 max-w-md">
-                    <div className="relative">
-                      <Search className="w-4 h-4 absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground" />
-                      <div className="pl-10 pr-4 py-2 bg-muted rounded-md text-sm text-muted-foreground">
-                        Search ads, products, shops...
-                      </div>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Filter className="w-4 h-4" />
-                    <span className="text-sm">Filters</span>
-                  </div>
-                </div>
-
-                {/* Mock ad grid */}
-                <div className="p-6 grid md:grid-cols-3 gap-6">
-                  {[1, 2, 3].map((i) => (
-                    <Card key={i} className="overflow-hidden hover:shadow-lg transition-shadow">
-                      <div className="aspect-square bg-gradient-card relative">
-                        <div className="absolute top-2 left-2 bg-primary text-white px-2 py-1 rounded text-xs">
-                          New Ad
-                        </div>
-                        <div className="absolute bottom-2 right-2 flex items-center gap-1 bg-black/50 text-white px-2 py-1 rounded text-xs">
-                          <Eye className="w-3 h-3" />
-                          2.4K
-                        </div>
-                      </div>
-                      <div className="p-4">
-                        <h3 className="font-semibold mb-2">Trending Product #{i}</h3>
-                        <div className="flex items-center justify-between text-sm text-muted-foreground">
-                          <span>5 days running</span>
-                          <div className="flex items-center gap-2">
-                            <Heart className="w-3 h-3" />
-                            <span>124</span>
-                          </div>
-                        </div>
-                      </div>
-                    </Card>
-                  ))}
-                </div>
-              </div>
-            </Card>
-          </div>
+        {/* Floating Tech Elements */}
+        <div className="absolute top-20 left-10 animate-float opacity-30">
+          <Cpu className="w-16 h-16 text-cyber-primary" />
+        </div>
+        <div className="absolute bottom-20 right-10 animate-float opacity-20" style={{animationDelay: '1s'}}>
+          <Atom className="w-20 h-20 text-cyber-secondary" />
+        </div>
+        <div className="absolute top-1/2 left-5 animate-float opacity-25" style={{animationDelay: '2s'}}>
+          <Orbit className="w-12 h-12 text-cyber-tertiary" />
         </div>
       </section>
 
-      {/* Stats Section */}
-      <section className="py-16 bg-minea-dark text-white">
+      {/* Social Proof with Cyber Style */}
+      <section className="py-12 border-y border-cyber-primary/20 bg-gradient-glass backdrop-blur-xl">
         <div className="container">
-          <div className="text-center mb-12">
-            <p className="text-white/80">Approved by over 200,000 e-commerce enthusiasts</p>
-          </div>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-            {stats.map((stat, i) => (
-              <div key={i} className="text-center">
-                <div className="text-3xl md:text-4xl font-bold text-primary mb-2">
-                  {stat.value}
+          <div className="flex flex-wrap items-center justify-center gap-6">
+            <span className="text-sm text-cyber-primary mr-4 flex items-center">
+              <Shield className="w-4 h-4 mr-2" />
+              Réseau Neural Certifié :
+            </span>
+            {testimonials.map((testimonial, i) => (
+              <div key={i} className="flex items-center gap-3 p-2 rounded-xl bg-gradient-glass border border-cyber-primary/10 hover:border-cyber-primary/30 transition-all duration-300">
+                <Avatar className="h-12 w-12 border-2 border-cyber-primary/20">
+                  <AvatarFallback className="bg-gradient-primary text-background font-bold">
+                    {testimonial.avatar}
+                  </AvatarFallback>
+                </Avatar>
+                <div className="text-xs">
+                  <div className="font-semibold">{testimonial.name}</div>
+                  <div className="text-cyber-primary font-bold">{testimonial.revenue}</div>
                 </div>
-                <div className="text-white/80">{stat.label}</div>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Features Section */}
-      <section className="py-32">
+      {/* Interactive Timeline Section */}
+      <section className="py-32 relative">
+        <div className="container">
+          <InteractiveTimeline />
+        </div>
+      </section>
+
+      {/* Interactive Comparison Section */}
+      <section className="py-32 bg-gradient-glass relative">
+        <div className="container">
+          <InteractiveComparison />
+        </div>
+      </section>
+
+      {/* Animated Testimonials Section */}
+      <section className="py-32 relative">
+        <div className="container">
+          <AnimatedTestimonials />
+        </div>
+      </section>
+
+      {/* Features with Immersive Cards */}
+      <section className="py-32 bg-gradient-glass relative">
         <div className="container">
           <div className="text-center mb-20">
-            <h2 className="text-4xl md:text-5xl font-bold mb-6">
-              Everything you need to <span className="text-primary">succeed</span>
+            <h2 className="text-4xl md:text-6xl font-bold mb-6">
+              <span className="text-foreground">Architecture</span>
+              <br />
+              <span className="bg-gradient-primary bg-clip-text text-transparent">Neuro-Quantique</span>
             </h2>
             <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-              Powerful tools designed to help you find winning products and scale your business
+              Technologies de rupture pour l'économie numérique de demain
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {features.map((feature, i) => {
               const Icon = feature.icon;
               return (
-                <Card key={i} className="p-6 text-center hover:shadow-lg transition-all duration-300 border-0 bg-gradient-card">
-                  <div className="w-16 h-16 rounded-full bg-gradient-primary flex items-center justify-center mx-auto mb-6">
-                    <Icon className="w-8 h-8 text-white" />
+                <Card key={i} className="group p-8 bg-gradient-glass border border-cyber-primary/20 hover:border-cyber-primary/40 transition-all duration-500 hover:shadow-cyber relative overflow-hidden">
+                  {/* Animated background */}
+                  <div className="absolute inset-0 bg-gradient-to-br from-cyber-primary/0 via-cyber-primary/5 to-cyber-primary/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                  
+                  <div className="relative z-10">
+                    <div className="w-16 h-16 rounded-2xl bg-gradient-primary flex items-center justify-center mb-6 mx-auto group-hover:animate-pulse-glow">
+                      <Icon className="w-8 h-8 text-background" />
+                    </div>
+                    <h3 className="text-xl font-bold mb-4 text-center group-hover:text-cyber-primary transition-colors duration-300">
+                      {feature.title}
+                    </h3>
+                    <p className="text-muted-foreground text-center leading-relaxed">
+                      {feature.desc}
+                    </p>
+                    
+                    {/* Cyber accent line */}
+                    <div className="mt-6 h-0.5 bg-gradient-to-r from-transparent via-cyber-primary to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                   </div>
-                  <h3 className="text-xl font-semibold mb-4">{feature.title}</h3>
-                  <p className="text-muted-foreground leading-relaxed">{feature.description}</p>
                 </Card>
               );
             })}
@@ -359,82 +382,52 @@ const Landing = () => {
         </div>
       </section>
 
-      {/* Testimonials */}
-      <section className="py-32 bg-gradient-card">
+      {/* Pricing with Quantum Style */}
+      <section className="py-32 bg-gradient-glass relative">
         <div className="container">
           <div className="text-center mb-20">
-            <h2 className="text-4xl md:text-5xl font-bold mb-6">
-              Trusted by <span className="text-primary">successful entrepreneurs</span>
-            </h2>
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-8">
-            {testimonials.map((testimonial, i) => (
-              <Card key={i} className="p-8 bg-white border-0 shadow-card">
-                <div className="flex items-center gap-4 mb-6">
-                  <Avatar className="h-12 w-12">
-                    <AvatarFallback className="bg-gradient-primary text-white font-bold">
-                      {testimonial.avatar}
-                    </AvatarFallback>
-                  </Avatar>
-                  <div>
-                    <div className="font-semibold">{testimonial.name}</div>
-                    <div className="text-sm text-muted-foreground">{testimonial.role}</div>
-                    <div className="text-sm font-semibold text-primary">{testimonial.revenue}</div>
-                  </div>
-                </div>
-                <p className="text-muted-foreground italic">"{testimonial.comment}"</p>
-                <div className="flex mt-4">
-                  {[...Array(5)].map((_, j) => (
-                    <Star key={j} className="w-4 h-4 fill-current text-primary" />
-                  ))}
-                </div>
-              </Card>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Pricing */}
-      <section className="py-32">
-        <div className="container">
-          <div className="text-center mb-20">
-            <h2 className="text-4xl md:text-5xl font-bold mb-6">
-              Choose your <span className="text-primary">plan</span>
+            <h2 className="text-4xl md:text-6xl font-bold mb-6">
+              <span className="text-foreground">Plans</span>
+              <br />
+              <span className="bg-gradient-primary bg-clip-text text-transparent">Quantiques</span>
             </h2>
             <p className="text-xl text-muted-foreground">
-              Start free, upgrade when you're ready
+              Accès aux dimensions parallèles du marketing
             </p>
           </div>
 
           <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
             {pricingPlans.map((plan, i) => (
-              <Card key={i} className={`relative p-8 transition-all duration-300 ${
+              <Card key={i} className={`relative p-8 transition-all duration-500 overflow-hidden ${
                 plan.popular 
-                  ? 'border-primary shadow-button scale-105' 
-                  : 'border-border hover:border-primary/50'
+                  ? 'bg-gradient-primary border-cyber-primary shadow-cyber scale-105' 
+                  : 'bg-gradient-glass border-cyber-primary/20 hover:border-cyber-primary/40'
               }`}>
                 {plan.popular && (
-                  <Badge className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-gradient-primary text-white">
-                    Most Popular
-                  </Badge>
+                  <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-cyber-primary via-cyber-secondary to-cyber-tertiary"></div>
                 )}
                 
                 <div className="text-center mb-8">
-                  <h3 className="text-2xl font-bold mb-2">{plan.name}</h3>
+                  <h3 className={`text-2xl font-bold mb-2 ${plan.popular ? 'text-background' : 'text-foreground'}`}>
+                    {plan.name}
+                  </h3>
                   <div className="flex items-baseline justify-center gap-1">
-                    <span className="text-5xl font-bold text-primary">{plan.price}</span>
-                    <span className="text-lg text-muted-foreground">{plan.period}</span>
+                    <span className={`text-5xl font-bold ${plan.popular ? 'text-background' : 'text-cyber-primary'}`}>
+                      {plan.price}
+                    </span>
+                    <span className={`text-lg ${plan.popular ? 'text-background/70' : 'text-muted-foreground'}`}>
+                      {plan.period}
+                    </span>
                   </div>
                 </div>
 
                 <ul className="space-y-4 mb-8">
                   {plan.features.map((feature, j) => (
                     <li key={j} className="flex items-start gap-3">
-                      <div className="w-5 h-5 rounded-full bg-primary/10 flex items-center justify-center mt-0.5">
-                        <div className="w-2 h-2 bg-primary rounded-full"></div>
-                      </div>
-                      <span className="text-sm">{feature}</span>
+                      <Check className={`w-5 h-5 mt-0.5 ${plan.popular ? 'text-background' : 'text-cyber-primary'}`} />
+                      <span className={`text-sm ${plan.popular ? 'text-background/90' : 'text-muted-foreground'}`}>
+                        {feature}
+                      </span>
                     </li>
                   ))}
                 </ul>
@@ -442,14 +435,14 @@ const Landing = () => {
                 <Button 
                   className={`w-full h-12 ${
                     plan.popular 
-                      ? 'bg-gradient-primary hover:shadow-button' 
-                      : 'bg-minea-dark hover:bg-minea-dark/90'
-                  }`}
+                      ? 'bg-background text-primary hover:bg-background/90' 
+                      : 'bg-gradient-primary hover:shadow-cyber'
+                  } transition-all duration-300`}
                   asChild
                 >
                   <Link to="/auth">
-                    Get Started
-                    <ChevronRight className="w-4 h-4 ml-2" />
+                    <Rocket className="w-4 h-4 mr-2" />
+                    Activer {plan.name}
                   </Link>
                 </Button>
               </Card>
@@ -458,43 +451,47 @@ const Landing = () => {
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="py-32 bg-gradient-hero">
-        <div className="container text-center">
-          <h2 className="text-5xl md:text-6xl font-bold mb-8 text-minea-dark">
-            Ready to find your next
+      {/* Final CTA with Immersive Effect */}
+      <section className="py-32 relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-cosmic opacity-80"></div>
+        <div className="container relative z-10 text-center">
+          <h2 className="text-5xl md:text-7xl font-bold mb-8">
+            <span className="text-foreground">Rejoignez la</span>
             <br />
-            <span className="text-primary">winning product?</span>
+            <span className="bg-gradient-primary bg-clip-text text-transparent animate-neon-flicker">
+              Révolution Quantique
+            </span>
           </h2>
           
-          <p className="text-xl text-minea-dark/70 max-w-3xl mx-auto mb-12">
-            Join thousands of successful entrepreneurs who use Minea to scale their businesses
+          <p className="text-xl text-muted-foreground max-w-3xl mx-auto mb-12">
+            L'avenir appartient à ceux qui maîtrisent l'IA. Commencez votre ascension dès maintenant.
           </p>
           
-          <Button size="lg" className="h-16 px-12 bg-minea-dark text-white hover:bg-minea-dark/90 text-xl" asChild>
+          <Button size="lg" className="h-20 px-16 bg-gradient-primary hover:shadow-cyber text-xl transition-all duration-500 group" asChild>
             <Link to="/auth">
-              Start Your Free Trial
-              <ChevronRight className="w-6 h-6 ml-2" />
+              <Brain className="w-8 h-8 mr-4 group-hover:animate-cyber-pulse" />
+              Initialiser la Séquence
+              <ArrowRight className="w-8 h-8 ml-4 group-hover:translate-x-2 transition-transform" />
             </Link>
           </Button>
         </div>
       </section>
 
       {/* Footer */}
-      <footer className="py-16 bg-minea-dark text-white">
+      <footer className="py-16 border-t border-cyber-primary/20 bg-gradient-glass backdrop-blur-xl">
         <div className="container">
           <div className="flex flex-col items-center gap-6">
-            <div className="flex items-center gap-2">
-              <div className="w-10 h-10 rounded-full bg-gradient-primary flex items-center justify-center">
-                <span className="text-white font-bold text-lg">M</span>
-              </div>
-              <span className="text-2xl font-bold">Minea</span>
+            <div className="flex items-center space-x-3">
+              <Wand2 className="h-8 w-8 text-cyber-primary animate-neon-flicker" />
+              <span className="font-bold text-2xl bg-gradient-primary bg-clip-text text-transparent">
+                NicheLaunchpad
+              </span>
             </div>
-            <p className="text-white/80 text-center max-w-2xl">
-              The leading adspy tool for e-commerce and dropshipping. Discover winning products and successful ad campaigns.
+            <p className="text-sm text-muted-foreground text-center max-w-2xl">
+              Plateforme de génération IA nouvelle génération. Propulsé par l'intelligence artificielle quantique et l'analyse prédictive avancée.
             </p>
-            <div className="text-sm text-white/60">
-              © 2024 Minea. All rights reserved.
+            <div className="text-xs text-muted-foreground">
+              © 2024 NicheLaunchpad. Tous droits réservés dans toutes les dimensions.
             </div>
           </div>
         </div>
