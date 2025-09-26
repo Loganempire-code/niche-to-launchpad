@@ -2,181 +2,392 @@ import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useAuth } from '@/contexts/AuthContext';
-import { useState, useEffect } from 'react';
 import { 
-  Wand2, ArrowRight, Star, Users, Crown, CheckCircle, Trophy, Flame, Timer, AlertTriangle, Clock, Rocket, X, Globe, LogOut, User
+  Search, 
+  TrendingUp, 
+  Eye, 
+  Heart, 
+  Share2, 
+  Filter, 
+  Play,
+  Star,
+  Users,
+  Target,
+  Zap,
+  ChevronRight,
+  LogOut,
+  User,
+  ShoppingCart,
+  BarChart3,
+  Globe,
+  Menu
 } from 'lucide-react';
 
 const Landing = () => {
   const { user, signOut } = useAuth();
-  const [timeLeft, setTimeLeft] = useState({ hours: 23, minutes: 47, seconds: 32 });
-  const [spotsLeft, setSpotsLeft] = useState(23);
 
-  // Countdown timer
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setTimeLeft(prev => {
-        let { hours, minutes, seconds } = prev;
-        if (seconds > 0) seconds--;
-        else if (minutes > 0) { minutes--; seconds = 59; }
-        else if (hours > 0) { hours--; minutes = 59; seconds = 59; }
-        return { hours, minutes, seconds };
-      });
-    }, 1000);
-    return () => clearInterval(timer);
-  }, []);
+  const stats = [
+    { label: 'Ads Tracked', value: '2.5M+' },
+    { label: 'Products Found', value: '850K+' },
+    { label: 'Success Rate', value: '94%' },
+    { label: 'Users', value: '200K+' }
+  ];
+
+  const features = [
+    {
+      icon: Search,
+      title: 'Advanced Ad Spy',
+      description: 'Track millions of ads across all major platforms with real-time data and analytics.'
+    },
+    {
+      icon: TrendingUp,
+      title: 'Winning Products',
+      description: 'Discover trending products before they saturate the market with our AI algorithms.'
+    },
+    {
+      icon: Target,
+      title: 'Competitor Analysis',
+      description: 'Analyze your competitors strategies and find gaps in the market.'
+    },
+    {
+      icon: BarChart3,
+      title: 'Sales Tracking',
+      description: 'Monitor product performance and sales data across multiple stores.'
+    }
+  ];
 
   const testimonials = [
-    { 
-      name: "Marie D.", avatar: "MD", revenue: "€73K en 3 mois",
-      quote: "J'ai quitté mon job après 2 semaines. Mes premiers €10K en 15 jours."
+    {
+      name: 'Sarah Chen',
+      role: 'E-commerce Entrepreneur',
+      avatar: 'SC',
+      comment: 'Found 5 winning products in my first week. Revenue increased by 340%!',
+      revenue: '$50K/month'
     },
-    { 
-      name: "Pierre M.", avatar: "PM", revenue: "€1.2M cette année",
-      quote: "À 22 ans, je gagne plus que mes parents réunis grâce à ce système."
+    {
+      name: 'Mike Rodriguez',
+      role: 'Dropshipper',
+      avatar: 'MR',
+      comment: 'The ad spy feature is incredible. I can see exactly what my competitors are doing.',
+      revenue: '$85K/month'
     },
-    { 
-      name: "Sophie C.", avatar: "SC", revenue: "€45K/mois",
-      quote: "Entre les couches, je génère plus que le salaire de mon mari."
+    {
+      name: 'Emma Johnson',
+      role: 'Digital Marketer',
+      avatar: 'EJ',
+      comment: 'Best investment for my business. ROI paid for itself in 2 weeks.',
+      revenue: '$120K/month'
+    }
+  ];
+
+  const pricingPlans = [
+    {
+      name: 'Starter',
+      price: '$39',
+      period: '/month',
+      features: [
+        '10,000 ad searches/month',
+        'Basic product research',
+        'Standard filters',
+        'Email support'
+      ],
+      popular: false
+    },
+    {
+      name: 'Professional',
+      price: '$79',
+      period: '/month',
+      features: [
+        'Unlimited ad searches',
+        'Advanced product research',
+        'All filters & sorting',
+        'Sales tracking',
+        'Priority support',
+        'Export data'
+      ],
+      popular: true
+    },
+    {
+      name: 'Agency',
+      price: '$149',
+      period: '/month',
+      features: [
+        'Everything in Professional',
+        'White-label access',
+        'API access',
+        'Custom integrations',
+        'Dedicated account manager',
+        'Custom reports'
+      ],
+      popular: false
     }
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-cosmic relative overflow-hidden">
+    <div className="min-h-screen bg-background">
       {/* Header */}
-      <header className="sticky top-0 z-50 w-full border-b border-cyber-primary/20 bg-background/10 backdrop-blur-xl">
+      <header className="sticky top-0 z-50 w-full border-b bg-background/80 backdrop-blur-xl">
         <div className="container flex h-16 items-center justify-between">
-          <Link to="/" className="flex items-center space-x-2">
-            <Wand2 className="h-8 w-8 text-cyber-primary" />
-            <span className="font-bold text-xl bg-gradient-primary bg-clip-text text-transparent">
-              NicheLaunchpad
-            </span>
-          </Link>
-          
-          {user ? (
-            <div className="flex items-center gap-4">
-              <Button variant="ghost" size="sm" asChild>
-                <Link to="/app">
-                  <Globe className="w-4 h-4 mr-2" />
-                  Dashboard
-                </Link>
-              </Button>
-              <Button variant="ghost" size="sm" onClick={() => signOut()}>
-                <LogOut className="w-4 h-4 mr-1" />
-                Déconnexion
-              </Button>
-            </div>
-          ) : (
-            <div className="flex gap-2">
-              <Button variant="ghost" size="sm" asChild>
-                <Link to="/auth">Se connecter</Link>
-              </Button>
-              <Button size="sm" asChild>
-                <Link to="/auth">Lancer</Link>
-              </Button>
-            </div>
-          )}
+          <div className="flex items-center gap-8">
+            <Link to="/" className="flex items-center gap-2">
+              <div className="w-10 h-10 rounded-full bg-gradient-primary flex items-center justify-center">
+                <span className="text-white font-bold text-lg">M</span>
+              </div>
+              <span className="text-2xl font-bold">Minea</span>
+            </Link>
+            
+            <nav className="hidden md:flex items-center gap-6">
+              <Link to="#" className="text-sm font-medium hover:text-primary transition-colors">
+                Adspy
+              </Link>
+              <Link to="#" className="text-sm font-medium hover:text-primary transition-colors">
+                Winning Products
+              </Link>
+              <Link to="#" className="text-sm font-medium hover:text-primary transition-colors">
+                FAQ
+              </Link>
+            </nav>
+          </div>
+
+          <div className="flex items-center gap-4">
+            {user ? (
+              <div className="flex items-center gap-4">
+                <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                  <User className="w-4 h-4" />
+                  {user.email}
+                </div>
+                <Button variant="ghost" size="sm" asChild>
+                  <Link to="/app">
+                    <Globe className="w-4 h-4 mr-2" />
+                    Dashboard
+                  </Link>
+                </Button>
+                <Button 
+                  variant="ghost" 
+                  size="sm" 
+                  onClick={async () => {
+                    await signOut();
+                  }}
+                >
+                  <LogOut className="w-4 h-4 mr-1" />
+                  Sign Out
+                </Button>
+              </div>
+            ) : (
+              <div className="flex items-center gap-2">
+                <Button variant="ghost" size="sm" asChild>
+                  <Link to="/auth">Login</Link>
+                </Button>
+                <Button size="sm" className="bg-gradient-primary hover:shadow-button" asChild>
+                  <Link to="/auth">Free Trial</Link>
+                </Button>
+              </div>
+            )}
+            <Button variant="ghost" size="sm" className="md:hidden">
+              <Menu className="w-4 h-4" />
+            </Button>
+          </div>
         </div>
       </header>
 
-      {/* Urgent Banner */}
-      <div className="bg-gradient-to-r from-red-600 via-orange-500 to-red-600 text-white py-3 px-4 animate-pulse">
-        <div className="container flex items-center justify-center gap-4 text-sm font-bold">
-          <AlertTriangle className="w-5 h-5" />
-          <span>ALERTE: Plus que {spotsLeft} places disponibles!</span>
-          <div className="flex items-center gap-2 bg-black/20 px-3 py-1 rounded-full">
-            <Timer className="w-4 h-4" />
-            <span>{String(timeLeft.hours).padStart(2, '0')}:{String(timeLeft.minutes).padStart(2, '0')}:{String(timeLeft.seconds).padStart(2, '0')}</span>
+      {/* Hero Section */}
+      <section className="relative py-32 bg-gradient-hero overflow-hidden">
+        <div className="container relative z-10">
+          <div className="max-w-4xl mx-auto text-center">
+            <Badge className="mb-6 bg-white/20 text-minea-dark border-0">
+              <Star className="w-4 h-4 mr-2 fill-current" />
+              #1 All-In-One AI DropShipping Tool
+            </Badge>
+            
+            <h1 className="text-5xl md:text-7xl font-bold mb-8 text-minea-dark">
+              Launch <span className="text-primary">Winning</span>
+              <br />
+              Products in <span className="text-primary">3 clicks</span>
+            </h1>
+            
+            <p className="text-xl md:text-2xl text-minea-dark/70 max-w-3xl mx-auto mb-12">
+              Minea is an all-in-one solution, designed to help you launch your ecommerce, scale your sales & boost profits
+            </p>
+            
+            <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16">
+              <Button 
+                size="lg"
+                className="h-14 px-8 bg-minea-dark text-white hover:bg-minea-dark/90 text-lg"
+                asChild
+              >
+                <Link to={user ? "/app" : "/auth"}>
+                  Start Now for Free
+                </Link>
+              </Button>
+              
+              <Button 
+                variant="outline" 
+                size="lg"
+                className="h-14 px-8 text-lg border-minea-dark/20 hover:bg-minea-dark/5"
+              >
+                <Play className="w-5 h-5 mr-2" />
+                Watch Demo
+              </Button>
+            </div>
+
+            <p className="text-sm text-minea-dark/60 mb-8">No commitment.</p>
+
+            {/* Feature badges */}
+            <div className="flex flex-wrap justify-center gap-4">
+              <Badge variant="secondary" className="px-4 py-2">
+                <Search className="w-4 h-4 mr-2" />
+                Browse Ads
+              </Badge>
+              <Badge variant="secondary" className="px-4 py-2">
+                <ShoppingCart className="w-4 h-4 mr-2" />
+                Browse Products
+              </Badge>
+              <Badge variant="secondary" className="px-4 py-2">
+                <BarChart3 className="w-4 h-4 mr-2" />
+                Sales Tracker
+              </Badge>
+            </div>
           </div>
         </div>
-      </div>
 
-      {/* Hero Section */}
-      <section className="py-20">
-        <div className="container text-center max-w-5xl mx-auto">
-          <Badge className="mb-6 bg-red-500 text-white animate-pulse">
-            <Flame className="w-4 h-4 mr-2" />
-            1,847 entrepreneurs connectés EN CE MOMENT
-          </Badge>
-          
-          <h1 className="text-4xl md:text-7xl font-black mb-8 leading-tight">
-            <span className="text-red-500">ARRÊTE</span> de Galérer...
-            <br />
-            <span className="bg-gradient-to-r from-yellow-400 to-orange-500 bg-clip-text text-transparent">
-              Génère €10,000+
-            </span>
-            <br />
-            <span className="text-foreground">en 47 Minutes</span>
-          </h1>
-          
-          <div className="mb-12 p-6 bg-gradient-to-r from-red-500/10 to-orange-500/10 border border-red-500/30 rounded-xl">
-            <p className="text-lg font-semibold text-red-400 mb-4">
-              ⚠️ TU ES EN TRAIN DE PERDRE DE L'ARGENT CHAQUE SECONDE
-            </p>
-            <p className="text-muted-foreground">
-              Pendant que tu lis ceci, d'autres génèrent déjà leurs premiers €€€. 
-              <span className="font-bold text-yellow-400"> Ne sois pas celui qui regarde les autres réussir.</span>
-            </p>
-          </div>
+        {/* Demo mockup */}
+        <div className="container mt-20">
+          <div className="max-w-6xl mx-auto">
+            <Card className="p-2 bg-white shadow-card">
+              <div className="bg-gradient-card rounded-lg overflow-hidden">
+                {/* Mock interface header */}
+                <div className="bg-white border-b p-4 flex items-center gap-4">
+                  <div className="flex items-center gap-2">
+                    <div className="w-8 h-8 rounded-full bg-gradient-primary flex items-center justify-center">
+                      <span className="text-white font-bold text-sm">M</span>
+                    </div>
+                    <span className="font-semibold">Minea</span>
+                  </div>
+                  <div className="flex-1 max-w-md">
+                    <div className="relative">
+                      <Search className="w-4 h-4 absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground" />
+                      <div className="pl-10 pr-4 py-2 bg-muted rounded-md text-sm text-muted-foreground">
+                        Search ads, products, shops...
+                      </div>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Filter className="w-4 h-4" />
+                    <span className="text-sm">Filters</span>
+                  </div>
+                </div>
 
-          <Button 
-            size="lg"
-            className="h-20 px-16 bg-gradient-to-r from-green-500 to-emerald-600 text-white text-xl font-black animate-bounce border-2 border-green-400 shadow-2xl mb-8"
-            asChild
-          >
-            <Link to={user ? "/app" : "/auth"}>
-              <Crown className="w-8 h-8 mr-4" />
-              <div>
-                <div>OUI, JE VEUX MES €10K+</div>
-                <div className="text-sm font-normal">(Avant qu'il soit trop tard)</div>
+                {/* Mock ad grid */}
+                <div className="p-6 grid md:grid-cols-3 gap-6">
+                  {[1, 2, 3].map((i) => (
+                    <Card key={i} className="overflow-hidden hover:shadow-lg transition-shadow">
+                      <div className="aspect-square bg-gradient-card relative">
+                        <div className="absolute top-2 left-2 bg-primary text-white px-2 py-1 rounded text-xs">
+                          New Ad
+                        </div>
+                        <div className="absolute bottom-2 right-2 flex items-center gap-1 bg-black/50 text-white px-2 py-1 rounded text-xs">
+                          <Eye className="w-3 h-3" />
+                          2.4K
+                        </div>
+                      </div>
+                      <div className="p-4">
+                        <h3 className="font-semibold mb-2">Trending Product #{i}</h3>
+                        <div className="flex items-center justify-between text-sm text-muted-foreground">
+                          <span>5 days running</span>
+                          <div className="flex items-center gap-2">
+                            <Heart className="w-3 h-3" />
+                            <span>124</span>
+                          </div>
+                        </div>
+                      </div>
+                    </Card>
+                  ))}
+                </div>
               </div>
-            </Link>
-          </Button>
-
-          <div className="text-xs text-red-400 font-semibold animate-pulse">
-            ⚡ ATTENTION: Prix augmente de 50% dans {String(timeLeft.hours).padStart(2, '0')}h{String(timeLeft.minutes).padStart(2, '0')}m
+            </Card>
           </div>
         </div>
       </section>
 
-      {/* Social Proof */}
-      <section className="py-20 bg-gradient-glass">
+      {/* Stats Section */}
+      <section className="py-16 bg-minea-dark text-white">
         <div className="container">
-          <h2 className="text-4xl md:text-6xl font-black mb-16 text-center">
-            Ils Étaient comme TOI...
-            <br />
-            <span className="bg-gradient-to-r from-green-400 to-emerald-500 bg-clip-text text-transparent">
-              Maintenant ils sont RICHES
-            </span>
-          </h2>
-
-          <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-            {testimonials.map((testimonial, i) => (
-              <Card key={i} className="p-6 bg-gradient-to-b from-green-500/10 to-emerald-500/5 border border-green-500/30">
-                <div className="absolute top-0 right-0 bg-green-500 text-white px-3 py-1 rounded-bl-lg text-xs font-bold">
-                  VÉRIFIÉ ✓
+          <div className="text-center mb-12">
+            <p className="text-white/80">Approved by over 200,000 e-commerce enthusiasts</p>
+          </div>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+            {stats.map((stat, i) => (
+              <div key={i} className="text-center">
+                <div className="text-3xl md:text-4xl font-bold text-primary mb-2">
+                  {stat.value}
                 </div>
-                
-                <div className="flex items-center gap-3 mb-4">
-                  <Avatar className="h-16 w-16 border-2 border-green-500/50">
-                    <AvatarFallback className="bg-gradient-to-r from-green-400 to-emerald-500 text-white font-bold text-lg">
+                <div className="text-white/80">{stat.label}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Features Section */}
+      <section className="py-32">
+        <div className="container">
+          <div className="text-center mb-20">
+            <h2 className="text-4xl md:text-5xl font-bold mb-6">
+              Everything you need to <span className="text-primary">succeed</span>
+            </h2>
+            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+              Powerful tools designed to help you find winning products and scale your business
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+            {features.map((feature, i) => {
+              const Icon = feature.icon;
+              return (
+                <Card key={i} className="p-6 text-center hover:shadow-lg transition-all duration-300 border-0 bg-gradient-card">
+                  <div className="w-16 h-16 rounded-full bg-gradient-primary flex items-center justify-center mx-auto mb-6">
+                    <Icon className="w-8 h-8 text-white" />
+                  </div>
+                  <h3 className="text-xl font-semibold mb-4">{feature.title}</h3>
+                  <p className="text-muted-foreground leading-relaxed">{feature.description}</p>
+                </Card>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* Testimonials */}
+      <section className="py-32 bg-gradient-card">
+        <div className="container">
+          <div className="text-center mb-20">
+            <h2 className="text-4xl md:text-5xl font-bold mb-6">
+              Trusted by <span className="text-primary">successful entrepreneurs</span>
+            </h2>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-8">
+            {testimonials.map((testimonial, i) => (
+              <Card key={i} className="p-8 bg-white border-0 shadow-card">
+                <div className="flex items-center gap-4 mb-6">
+                  <Avatar className="h-12 w-12">
+                    <AvatarFallback className="bg-gradient-primary text-white font-bold">
                       {testimonial.avatar}
                     </AvatarFallback>
                   </Avatar>
                   <div>
-                    <h3 className="font-bold text-lg">{testimonial.name}</h3>
-                    <Star className="w-4 h-4 text-yellow-400 fill-current" />
+                    <div className="font-semibold">{testimonial.name}</div>
+                    <div className="text-sm text-muted-foreground">{testimonial.role}</div>
+                    <div className="text-sm font-semibold text-primary">{testimonial.revenue}</div>
                   </div>
                 </div>
-
-                <blockquote className="text-sm mb-4 italic">
-                  "{testimonial.quote}"
-                </blockquote>
-
-                <div className="text-center p-3 bg-gradient-to-r from-green-500 to-emerald-500 rounded-lg">
-                  <div className="text-2xl font-black text-white">{testimonial.revenue}</div>
+                <p className="text-muted-foreground italic">"{testimonial.comment}"</p>
+                <div className="flex mt-4">
+                  {[...Array(5)].map((_, j) => (
+                    <Star key={j} className="w-4 h-4 fill-current text-primary" />
+                  ))}
                 </div>
               </Card>
             ))}
@@ -184,66 +395,108 @@ const Landing = () => {
         </div>
       </section>
 
-      {/* Final CTA */}
-      <section className="py-20 bg-gradient-to-b from-red-900/20 to-background">
-        <div className="container text-center max-w-4xl mx-auto">
-          <h2 className="text-5xl md:text-7xl font-black mb-12">
-            <span className="text-red-500">DERNIERS</span>
-            <br />
-            <span className="text-white">AVERTISSEMENTS</span>
-          </h2>
-
-          <div className="bg-gradient-to-r from-black/50 to-black/30 p-8 rounded-2xl border border-red-500/30 mb-12">
-            <div className="grid md:grid-cols-2 gap-8 text-left">
-              <div>
-                <h4 className="text-xl font-bold text-red-400 mb-4 flex items-center gap-2">
-                  <X className="w-6 h-6" /> SI TU REFUSES
-                </h4>
-                <ul className="space-y-2 text-muted-foreground">
-                  <li>• Tu continues à perdre de l'argent</li>
-                  <li>• Tes concurrents prennent de l'avance</li>
-                  <li>• Tu payes plus cher plus tard</li>
-                </ul>
-              </div>
-              <div>
-                <h4 className="text-xl font-bold text-green-400 mb-4 flex items-center gap-2">
-                  <CheckCircle className="w-6 h-6" /> SI TU ACCEPTES
-                </h4>
-                <ul className="space-y-2 text-muted-foreground">
-                  <li>• Tes premiers €10K+ en 47 minutes</li>
-                  <li>• Tu domines tes concurrents</li>
-                  <li>• Tu économises 98% aujourd'hui</li>
-                </ul>
-              </div>
-            </div>
+      {/* Pricing */}
+      <section className="py-32">
+        <div className="container">
+          <div className="text-center mb-20">
+            <h2 className="text-4xl md:text-5xl font-bold mb-6">
+              Choose your <span className="text-primary">plan</span>
+            </h2>
+            <p className="text-xl text-muted-foreground">
+              Start free, upgrade when you're ready
+            </p>
           </div>
 
-          <Button 
-            size="lg"
-            className="h-24 px-20 bg-gradient-to-r from-green-500 to-green-600 text-white text-2xl font-black animate-pulse border-4 border-green-400 shadow-2xl mb-6"
-            asChild
-          >
-            <Link to={user ? "/app" : "/auth"}>
-              <Crown className="w-10 h-10 mr-4" />
-              <div>
-                <div>OUI, JE PRENDS MA PLACE</div>
-                <div className="text-lg font-normal">(Avant que ce soit trop tard)</div>
-              </div>
+          <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+            {pricingPlans.map((plan, i) => (
+              <Card key={i} className={`relative p-8 transition-all duration-300 ${
+                plan.popular 
+                  ? 'border-primary shadow-button scale-105' 
+                  : 'border-border hover:border-primary/50'
+              }`}>
+                {plan.popular && (
+                  <Badge className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-gradient-primary text-white">
+                    Most Popular
+                  </Badge>
+                )}
+                
+                <div className="text-center mb-8">
+                  <h3 className="text-2xl font-bold mb-2">{plan.name}</h3>
+                  <div className="flex items-baseline justify-center gap-1">
+                    <span className="text-5xl font-bold text-primary">{plan.price}</span>
+                    <span className="text-lg text-muted-foreground">{plan.period}</span>
+                  </div>
+                </div>
+
+                <ul className="space-y-4 mb-8">
+                  {plan.features.map((feature, j) => (
+                    <li key={j} className="flex items-start gap-3">
+                      <div className="w-5 h-5 rounded-full bg-primary/10 flex items-center justify-center mt-0.5">
+                        <div className="w-2 h-2 bg-primary rounded-full"></div>
+                      </div>
+                      <span className="text-sm">{feature}</span>
+                    </li>
+                  ))}
+                </ul>
+
+                <Button 
+                  className={`w-full h-12 ${
+                    plan.popular 
+                      ? 'bg-gradient-primary hover:shadow-button' 
+                      : 'bg-minea-dark hover:bg-minea-dark/90'
+                  }`}
+                  asChild
+                >
+                  <Link to="/auth">
+                    Get Started
+                    <ChevronRight className="w-4 h-4 ml-2" />
+                  </Link>
+                </Button>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* CTA Section */}
+      <section className="py-32 bg-gradient-hero">
+        <div className="container text-center">
+          <h2 className="text-5xl md:text-6xl font-bold mb-8 text-minea-dark">
+            Ready to find your next
+            <br />
+            <span className="text-primary">winning product?</span>
+          </h2>
+          
+          <p className="text-xl text-minea-dark/70 max-w-3xl mx-auto mb-12">
+            Join thousands of successful entrepreneurs who use Minea to scale their businesses
+          </p>
+          
+          <Button size="lg" className="h-16 px-12 bg-minea-dark text-white hover:bg-minea-dark/90 text-xl" asChild>
+            <Link to="/auth">
+              Start Your Free Trial
+              <ChevronRight className="w-6 h-6 ml-2" />
             </Link>
           </Button>
-          
-          <p className="text-sm text-red-400 font-bold animate-pulse">
-            ⚡ Plus que {spotsLeft} places • {String(timeLeft.hours).padStart(2, '0')}h{String(timeLeft.minutes).padStart(2, '0')}m{String(timeLeft.seconds).padStart(2, '0')}s
-          </p>
         </div>
       </section>
 
       {/* Footer */}
-      <footer className="py-8 border-t border-cyber-primary/20 bg-background/50">
-        <div className="container text-center">
-          <p className="text-sm text-muted-foreground">
-            © 2024 NicheLaunchpad. Tous droits réservés.
-          </p>
+      <footer className="py-16 bg-minea-dark text-white">
+        <div className="container">
+          <div className="flex flex-col items-center gap-6">
+            <div className="flex items-center gap-2">
+              <div className="w-10 h-10 rounded-full bg-gradient-primary flex items-center justify-center">
+                <span className="text-white font-bold text-lg">M</span>
+              </div>
+              <span className="text-2xl font-bold">Minea</span>
+            </div>
+            <p className="text-white/80 text-center max-w-2xl">
+              The leading adspy tool for e-commerce and dropshipping. Discover winning products and successful ad campaigns.
+            </p>
+            <div className="text-sm text-white/60">
+              © 2024 Minea. All rights reserved.
+            </div>
+          </div>
         </div>
       </footer>
     </div>
