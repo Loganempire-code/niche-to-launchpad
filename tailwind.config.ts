@@ -84,11 +84,10 @@ export default {
 					DEFAULT: 'hsl(var(--secondary))',
 					foreground: 'hsl(var(--secondary-foreground))'
 				},
-				minea: {
-					orange: 'hsl(var(--minea-orange))',
-					yellow: 'hsl(var(--minea-yellow))',
-					dark: 'hsl(var(--minea-dark))',
-					light: 'hsl(var(--minea-light))'
+				cyber: {
+					primary: 'hsl(var(--cyber-primary))',
+					secondary: 'hsl(var(--cyber-secondary))',
+					tertiary: 'hsl(var(--cyber-tertiary))'
 				},
 			borderRadius: {
 				lg: 'var(--radius)',
